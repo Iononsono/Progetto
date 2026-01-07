@@ -2,21 +2,19 @@ public  class Entita {
     protected String nome;
 
     protected int classe;
-
+    Eroe er = new Eroe(nome, classe);
     public Entita(String nome, int classe) {
         this.nome = nome;
         this.classe = classe;
+        System.out.println("Eroe creato: " + er.nome + " Classe: " + er.classeN);
     }
-
-    public void CreaEroe(String nome, int classe){
-       Eroe er= new Eroe(nome, classe);
-    }
-
+    
     public String getNome() {
-        return nome;
+        return er.nome;
     }
 
-    public int getClasse() {
-        return classe;
+    public String getClasse() {
+        return er.classeN;
     }
+    
 }
