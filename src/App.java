@@ -21,7 +21,8 @@ public class App {
             System.out.println("Scegli la classe del tuo eroe: 1-Guerriero 2-Mago 3-Arciere");
             classeEroe = input.nextInt();
             System.out.println("Classe eroe scelta: " + classeEroe);
-            Entita e = new Entita(nomeEroe, classeEroe);
+            Eroe e = new Eroe(nomeEroe, classeEroe);
+            //Entita e = new Entita(nomeEroe, classeEroe);
        }
     
        input.close();
