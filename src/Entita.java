@@ -1,4 +1,4 @@
-public class Entita {
+public abstract class  Entita {
     protected String nome;
     protected int classe;
     protected Eroe er; // Dichiariamo solo la variabile, senza "new" qui
