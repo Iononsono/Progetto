@@ -1,10 +1,11 @@
 public class Eroe extends Entita {
     protected String classeN;
+    protected BaseStats bs;
 
     public Eroe(String nome, int classe) {
         // Chiama il costruttore di Entita per inizializzare nome e classe
         super(nome, classe);
-
+        
         
         if (classe == 2) {
             this.classeN = "Mago";
@@ -20,7 +21,15 @@ public class Eroe extends Entita {
         }
 
         System.out.println("Eroe creato correttamente: " + this.nome + " [" + this.classeN + "]");
+        this.bs = new BaseStats(this.classeN);
+        initBaseStats();
     }
 
+    public void initBaseStats() {
+        // Implementa la logica per impostare le statistiche di base in base alla classe
+       
+        System.out.println("Inizializzazione statistiche base per "+ this.classeN);
+        this.bs.setBaseStats(this.classeN);
+    }
     
 }

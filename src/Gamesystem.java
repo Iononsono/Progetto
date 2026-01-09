@@ -8,11 +8,10 @@ public Gamesystem() {
     
 
     public void start() {
-      Scanner input = new Scanner(System.in);
-
-      String nomeEroe;
+        Entita e;
+        Scanner input = new Scanner(System.in);
+        String nomeEroe;
         int classeEroe;
-        System.out.println("Hello, World!");
         System.out.println("Benvenuto in Bit And Blade!");
         System.out.println("Sei admin o player?(0 o 1)"); 
 
@@ -28,8 +27,8 @@ public Gamesystem() {
             System.out.println("Scegli la classe del tuo eroe: 1-Guerriero 2-Mago 3-Arciere");
             classeEroe = input.nextInt();
             System.out.println("Classe eroe scelta: " + classeEroe);
-            Eroe e = new Eroe(nomeEroe, classeEroe);
-            //Entita e = new Entita(nomeEroe, classeEroe);
+            e = new Entita(nomeEroe, classeEroe);
+            e.CreaEroe();//CREAZIONE EROE
             
        }
     
