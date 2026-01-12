@@ -31,5 +31,14 @@ public class Eroe extends Entita {
         System.out.println("Inizializzazione statistiche base per "+ this.classeN);
         this.bs.setBaseStats(this.classeN);
     }
-    
+
+    public void mostraStats() {
+        System.out.println("HP: " + bs.hp + ", ATK: " + bs.atk + ", MP: " + bs.mp);
+    }
+    public String getNome() {
+        return nome;
+    }
+    public String getClasse() {
+        return this.classeN;
+    }
 }
