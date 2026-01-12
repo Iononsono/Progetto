@@ -14,7 +14,7 @@ public class Gamesystem {
     public void start() {
         System.out.println("Benvenuto in Bit And Blade!");
         selezioneAttore();
-        mostrascheda();
+        mostraScheda();
         input.close();
     }
   
@@ -46,15 +46,20 @@ public class Gamesystem {
         }
     }
 
-    public void mostrascheda() {
+    public void mostraScheda() {
 
         System.out.println("Di quale Entità vuoi vedere la scheda?");
-        //successivamente per cercare tra tutte le entità (for e: in e.listaEntità)
-        if (e.getNome().equals(input.nextLine())) {
-            e.mostraSchedaEntita();
-        } else {
-            System.out.println("Entità non trovata.");
-        }
+        input.nextLine();
+        String nomeEroe = input.nextLine();
+
+        for (Eroe e : listaEroi) {
+            if (e.getNome().equals(nomeEroe)) {
+                e.mostraSchedaEntita();
+                return;
+            }
+        }   
+
+        System.out.println("Eroe non trovata.");
     }
 
     public void stampaVeloce() {

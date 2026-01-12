@@ -12,16 +12,9 @@ public abstract class Entita {
     public void CreaEroe() {
         er = new Eroe(nome, classe);
     }
-
     public String getNome() {
-        //quando faremo nemico aggiungiamo l'attore come parametro
         return nome;
     }
-
-    public String getClasse() {
-        return er.classeN;
-    }
-
     public void mostraSchedaEntita() {
         System.out.println("Nome: " + er.getNome());
         System.out.println("Classe: " + er.getClasse());
