@@ -1,5 +1,5 @@
 import java.util.Scanner;
-public  class  Entita {
+public abstract class Entita {
     protected String nome;
     Scanner input = new Scanner(System.in);
     protected int classe;

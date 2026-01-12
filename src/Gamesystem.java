@@ -1,7 +1,11 @@
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Gamesystem {
     private Entita e;
+    private List<Eroe> listaEroi = new ArrayList<>();
+    private List<Nemico> listaNemici = new ArrayList<>();
     private Scanner input = new Scanner(System.in);
     public Gamesystem() {
 
@@ -32,8 +36,13 @@ public class Gamesystem {
             System.out.println("Scegli la classe del tuo eroe: 1-Guerriero 2-Mago 3-Arciere");
             classeEroe = input.nextInt();
             System.out.println("Classe eroe scelta: " + classeEroe);
-            e = new Entita(nomeEroe, classeEroe);
-            e.CreaEroe();//CREAZIONE EROE    
+            //e = new Entita(nomeEroe, classeEroe);
+            //CREAZIONE EROE e.CreaEroe();   
+            Eroe er = new Eroe(nomeEroe, classeEroe);
+            listaEroi.add(er);
+
+            
+            
         }
     }
 
@@ -46,5 +55,10 @@ public class Gamesystem {
         } else {
             System.out.println("Entità non trovata.");
         }
+    }
+
+    public void stampaVeloce() {
+    listaEroi.forEach(System.out::println);
+    //listaNemici.forEach(System.out::println);
     }
 }
