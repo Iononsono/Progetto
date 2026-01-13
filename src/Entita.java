@@ -6,7 +6,7 @@ public abstract class Entita {
     Scanner input = new Scanner(System.in);
     protected String classe;
     protected Eroe er; // Dichiariamo solo la variabile, senza "new" qui
-    Map<String, Float> stats = new HashMap<>();
+    public Map<String, Float> stats = new HashMap<>();
 
     public Entita(String nome, String classe) {
         this.nome=nome;

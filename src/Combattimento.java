@@ -1,4 +1,5 @@
 import java.util.Map;
+import java.util.Random;
 
 public class Combattimento {
     private Eroe e;
@@ -17,7 +18,7 @@ public class Combattimento {
 
         while (statsEroe.get("hp") > 0 && statsNemico.get("hp") > 0) {
             // Turno dell'eroe
-            float dannoEroe = statsEroe.get("atk");
+            float dannoEroe = calcoloDanno(statsEroe.get("atk"));
             statsNemico.put("hp", statsNemico.get("hp") - dannoEroe);
             System.out.println(e.getNome() + " attacca {" + n.getNome() + "} per " + dannoEroe + " danni. HP rimanenti di {" + n.getNome() + "}: " + statsNemico.get("hp"));
             if (statsNemico.get("hp") <= 0) {
@@ -26,7 +27,7 @@ public class Combattimento {
             }
 
             // Turno del nemico
-            float dannoNemico = statsNemico.get("atk");
+            float dannoNemico = calcoloDanno(statsNemico.get("atk"));
             statsEroe.put("hp", statsEroe.get("hp") - dannoNemico);
             System.out.println(n.getNome() + " attacca {" + e.getNome() + "} per " + dannoNemico + " danni. HP rimanenti di {" + e.getNome() + "}: " + statsEroe.get("hp"));
 
@@ -37,5 +38,11 @@ public class Combattimento {
         }
 
         System.out.println("Combattimento terminato.");
+    }
+    public float calcoloDanno(float atk) {
+        Random random = new Random();
+        float r = random.nextFloat(0.1f, 0.6f);
+        System.err.println("Lancio del dado: " + r*100);
+        return Float.parseFloat(String.format("%.1f", atk*r)); // Implementa la logica per calcolare il danno in base alle statistiche
     }
 }
