@@ -7,6 +7,7 @@ public class Gamesystem {
     private List<Eroe> listaEroi = new ArrayList<>();
     private List<Nemico> listaNemici = new ArrayList<>();
     private Scanner input = new Scanner(System.in);
+    private Combattimento c = null;
     public Gamesystem() {
 
     }
@@ -70,21 +71,17 @@ public class Gamesystem {
 
         System.out.println("Di quale personaggio vuoi vedere la scheda?");
         String nomeEroe = input.nextLine();
-
-        for (Eroe e : listaEroi) {
-            if (e.getNome().equals(nomeEroe)) {
-                e.mostraSchedaEntita();
-                return;
-            }
-        }
-        for (Nemico n : listaNemici) {
-            if (n.getNome().equals(nomeEroe)) {
-                n.mostraSchedaEntita();
-                return;
-            }
+        Eroe e= trovaEroe(nomeEroe);
+        Nemico n= trovaNemico(nomeEroe);
+        if (e != null) {
+            e.mostraSchedaEntita();
+        }else if (n!=null){
+            n.mostraSchedaEntita();
+        }else {
+            System.out.println("Personaggio non trovato.");
         }     
 
-        System.out.println("Eroe non trovata.");
+        
     }
 
     public void stampaVeloce() {
@@ -98,6 +95,42 @@ public class Gamesystem {
          }
     
     //listaNemici.forEach(System.out::println);
+    }
+    public void avviaCombattimento() {
+        System.out.println("Quale eroe vuoi fare combattere?");
+        String nomeEroe = input.nextLine();
+        Eroe e= trovaEroe(nomeEroe);
+        if (e != null) {
+            System.out.println("Con quale nemico vuoi far combattere " + e.getNome() + "?");;
+            Nemico n= listaNemici.get(0); // Per semplicità, selezioniamo il primo nemico della lista
+            if (n != null) {
+                c=new Combattimento(e, n);
+                
+                // Implementa la logica del combattimento qui
+            } else {
+                System.out.println("Nemico non trovato.");
+            }
+        } else {
+            System.out.println("Eroe non trovato.");
+        }
+        
+    }
+
+    public Eroe trovaEroe(String nome) {
+        for (Eroe e : listaEroi) {
+            if (e.getNome().equals(nome)) {
+                return e;
+            }
+        }
+        return null; 
+    }
+    public Nemico trovaNemico(String nome) {
+        for (Nemico n : listaNemici) {
+            if (n.getNome().equals(nome)) {
+                return n;
+            }
+        }
+        return null; 
     }
     
     public void mostraMenu() {
@@ -123,7 +156,7 @@ public class Gamesystem {
                 mostraScheda();
                 break;
             case 3:
-                //avviaCombattimento();
+                avviaCombattimento();
                 break;
             case 4:
                 stampaVeloce();
