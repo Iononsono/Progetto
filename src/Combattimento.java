@@ -11,7 +11,7 @@ public class Combattimento {
         this.e = e;
         this.n = n;
         this.statsEroe = new HashMap<>(e.getStats());
-        this.statsNemico = n.getStats();
+        this.statsNemico = new HashMap<>(n.getStats());
         avviaCombattimento();
     }
     public void avviaCombattimento() {
