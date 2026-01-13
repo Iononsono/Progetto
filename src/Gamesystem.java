@@ -115,7 +115,7 @@ public class Gamesystem {
 
         scelta = Integer.parseInt(input.nextLine());
 
-        switch (scelta) {
+        switch (scelta) {  
             case 1:
                 selezioneAttore();
                 break;
