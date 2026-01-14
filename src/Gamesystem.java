@@ -1,21 +1,30 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class Gamesystem {
-    
+    private Eroe er;
+    private Nemico n;
+    private Spell s;
     private List<Eroe> listaEroi = new ArrayList<>();
     private List<Nemico> listaNemici = new ArrayList<>();
-    private Scanner input = new Scanner(System.in);
+    private List<Spell> listaSpells = new ArrayList<>();
+    private Scanner input= new Scanner(System.in);
     private Combattimento c = null;
     public Gamesystem() {
-
+       
     }
         
     public void start() {
         System.out.println("Benvenuto in Bit And Blade!");
-        
+        letturadatiFile();
         mostraMenu();
+
         input.close();
     }
   
@@ -34,14 +43,14 @@ public class Gamesystem {
            switch(scelta){
     
             case 1:
-                System.out.println("Funzione di creazione Nemico non ancora implementata.");
                 System.out.println("Inserisci il nome del nemico:");
                 input.nextLine(); 
                 nome = input.nextLine();
-                System.out.println("Specifica se il nemico è un boss o un nemico semplice:");
+                System.out.println("Specifica se il nemico è un boss o un goblin:");
                 classe= input.nextLine();
                 Nemico n=new Nemico(nome, classe);
                 listaNemici.add(n);
+                salvaSuFile(n);
                 System.out.println("Nemico creato: " + n.getNome() + " Classe: " + n.getClasse());
                 break;
             default:
@@ -61,12 +70,99 @@ public class Gamesystem {
             //CREAZIONE EROE e.CreaEroe();   
             Eroe er = new Eroe(nome, classe);
             listaEroi.add(er);
+            salvaSuFile(er);
 
             
             
         }
     }
 
+    public void letturadatiFile() {
+        String FileEroe= "src/eroi.txt";
+        String FileNemico= "src/nemici.txt";
+        String FileSpell="src/spells.txt";
+
+        try (BufferedReader br = new BufferedReader(new FileReader(FileSpell))) {
+            String riga;
+            // Legge riga per riga finché il file non è vuoto
+            while ((riga = br.readLine()) != null) {
+                if (riga.trim().isEmpty()) continue; // Salta righe vuote
+
+                String[] dati = riga.split("\\|");
+               
+                Spell s= new Spell(dati[0], dati[1], dati[2], Float.parseFloat(dati[3]));
+                listaSpells.add(s);
+                System.out.println("Spell caricata: " + s.getNome());
+            }
+
+        } catch (Exception e) {
+            System.err.println("Errore nel caricamento file: " + e.getMessage());
+        }
+
+        try (BufferedReader br = new BufferedReader(new FileReader(FileEroe))) {
+            String riga;
+            // Legge riga per riga finché il file non è vuoto
+            while ((riga = br.readLine()) != null) {
+                if (riga.trim().isEmpty()) continue; // Salta righe vuote
+
+                String[] dati = riga.split("\\|");
+               
+                er= new Eroe(dati[0], dati[1], Float.parseFloat(dati[2]), Float.parseFloat(dati[3]), Float.parseFloat(dati[4]));
+                listaEroi.add(er);
+                er.addSpells(listaSpells);
+            }
+
+        } catch (Exception e) {
+            System.err.println("Errore nel caricamento file: " + e.getMessage());
+        }
+
+        try (BufferedReader br = new BufferedReader(new FileReader(FileNemico))) {
+            String riga;
+            // Legge riga per riga finché il file non è vuoto
+            while ((riga = br.readLine()) != null) {
+                if (riga.trim().isEmpty()) continue; // Salta righe vuote
+
+                String[] dati = riga.split("\\|");
+               
+                n= new Nemico(dati[0], dati[1], Float.parseFloat(dati[2]), Float.parseFloat(dati[3]), Float.parseFloat(dati[4]));
+                listaNemici.add(n);
+            }
+
+        } catch (Exception e) {
+            System.err.println("Errore nel caricamento file: " + e.getMessage());
+        }
+    }
+
+    public void salvaSuFile(Entita en) {
+        String FileEroe= "src/eroi.txt";
+        String FileNemico= "src/nemici.txt";
+        String File;
+        if (en.classe.equals("goblin") || en.classe.equals("boss")) {
+            File = FileNemico;
+        }
+        else  File = FileEroe;
+        
+        try (FileWriter fw = new FileWriter(File, true); // 'true' aggiunge al file senza cancellare il vecchio
+             PrintWriter out = new PrintWriter(fw)) {
+            
+            // Recuperiamo i dati dall'eroe (coerente con UC1 e UC12)
+            String dati = String.format("%s|%s|%.1f|%.1f|%.1f\n",
+                en.getNome(),
+                en.getClasse(),
+                en.getStats().get("hp"),
+                en.getStats().get("atk"),
+                en.getStats().get("mp")
+            );
+            
+            out.println(dati);
+            System.out.println("Salvataggio completato per: " + en.getNome());
+            
+        } catch (IOException e) {
+            System.err.println("Errore durante il salvataggio: " + e.getMessage());
+        }
+    }
+        
+    
     public void mostraScheda() {
 
         System.out.println("Di quale personaggio vuoi vedere la scheda?");

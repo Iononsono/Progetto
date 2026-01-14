@@ -1,0 +1,2 @@
+Mario|Mago|100.0|200.0|15.0
+Luigi|Guerriero|150.0|50.0|25.0

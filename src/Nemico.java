@@ -33,5 +33,11 @@ protected float hp,atk,mp;
 
     }
     
-    
+    public Nemico(String nome, String classe, float hp, float atk, float mp) {
+        super(nome, classe);
+        stats.put("hp", hp);
+        stats.put("atk", atk);
+        stats.put("mp", mp);
+        
+    }
 }

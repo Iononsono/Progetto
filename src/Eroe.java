@@ -1,7 +1,10 @@
+import java.util.ArrayList;
+import java.util.List;
 
 public class Eroe extends Entita {
     protected String classeN;
     protected BaseStats bs;
+    private List<Spell> SpellsEroe = new ArrayList<>();
 
     public Eroe(String nome, String classe) {
         // Chiama il costruttore di Entita per inizializzare nome e classe
@@ -18,7 +21,7 @@ public class Eroe extends Entita {
             
              System.out.println("Eroe creato correttamente: " + nome + " [" + this.classe + "]");
             this.bs = new BaseStats(this.classe);
-            initBaseStats(); 
+            initBaseStats();
         }
 
       
@@ -33,7 +36,24 @@ public class Eroe extends Entita {
         stats.put("atk", bs.atk);
         stats.put("mp", bs.mp);
     }
-
     
+
+    public Eroe(String nome, String classe, float hp, float atk, float mp) {
+        super(nome, classe);
+        stats.put("hp", hp);
+        stats.put("atk", atk);
+        stats.put("mp", mp);
+        
+    }
+    
+    public void addSpells(List<Spell> listaSpells) {
+        for(Spell s : listaSpells) {
+            if(s.getClasse().equals(this.classe)) {
+                System.out.printf(" %s[%s] è stata appresa da %s[%s]\n", s.getNome(),s.getClasse(),this.nome,this.classe);
+                SpellsEroe.add(s);
+            }
+        }
+        
+    }
      
 }

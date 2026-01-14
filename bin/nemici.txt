@@ -1,0 +1,4 @@
+Browser|Boss|100.0|200.0|15.0
+Waluigi|Goblin|150.0|50.0|25.0
+p|goblin|3.0|3.0|3.0
+
