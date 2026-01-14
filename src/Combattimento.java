@@ -54,7 +54,7 @@ public class Combattimento {
     public float calcoloDanno(float atk) {
     Random random = new Random();
     // UC5: Il sistema effettua il tiro di dado 
-    float r = random.nextFloat(0.1f, 0.7f); 
+    float r = random.nextFloat(1.1f, 1.7f); 
     
     // CORREZIONE: Usa %f per float o casta a (int) se vuoi usare %d
     System.out.printf("Lancio del dado: %d\n", (int)(r * 10)); 
