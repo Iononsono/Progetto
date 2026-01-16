@@ -1,7 +1,7 @@
-Palla di Fuoco|Lancia una sfera infuocata che esplode all'impatto|Mago|20.0
-Fulmine|Un fulmine colpisce il nemico dal cielo|Mago|15.0
-Colpo Eroico|Un attacco potente infuso di forza bruta|Guerriero|10.0
-Grido di Guerra|Aumenta la determinazione e recupera un po' di forze|Guerriero|5.0
-Freccia Perforante|Una freccia magica che attraversa le armature|Arciere|12.5
-Pioggia di Frecce|Colpisce il nemico con una raffica incessante|Arciere|18.0
-Dardo Incantato|Un proiettile di pura energia magica|Mago|10.0
+Palla di Fuoco|Lancia una sfera infuocata che esplode all'impatto|Mago|20.0|DAMAGE|30
+Fulmine|Un fulmine colpisce il nemico dal cielo|Mago|15.0|DAMAGE|25
+Dardo Incantato|Un proiettile di pura energia magica|Mago|10.0|DAMAGE|15
+Colpo Eroico|Un attacco potente infuso di forza bruta|Guerriero|10.0|DAMAGE|20
+Freccia Perforante|Una freccia magica che attraversa le armature|Arciere|12.5|DAMAGE|22
+Pioggia di Frecce|Colpisce il nemico con una raffica incessante|Arciere|18.0|DAMAGE|28
+Grido di Guerra|Aumenta la determinazione e recupera un po' di forze|Guerriero|5.0|BUFF|+3_ATK

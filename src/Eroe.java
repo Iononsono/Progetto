@@ -22,6 +22,7 @@ public class Eroe extends Entita {
              System.out.println("Eroe creato correttamente: " + nome + " [" + this.classe + "]");
             this.bs = new BaseStats(this.classe);
             initBaseStats();
+            addSpells(this.SpellsEroe);
         }
 
       
@@ -54,6 +55,10 @@ public class Eroe extends Entita {
             }
         }
         
+    }
+
+    public List<Spell> getSpells() {
+        return SpellsEroe;
     }
      
 }

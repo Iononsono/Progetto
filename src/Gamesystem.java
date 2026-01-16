@@ -15,6 +15,7 @@ public class Gamesystem {
     private List<Nemico> listaNemici = new ArrayList<>();
     private List<Spell> listaSpells = new ArrayList<>();
     private Scanner input= new Scanner(System.in);
+    private String[] dati;
     private Combattimento c = null;
     public Gamesystem() {
        
@@ -87,12 +88,8 @@ public class Gamesystem {
             // Legge riga per riga finché il file non è vuoto
             while ((riga = br.readLine()) != null) {
                 if (riga.trim().isEmpty()) continue; // Salta righe vuote
-
-                String[] dati = riga.split("\\|");
-               
-                Spell s= new Spell(dati[0], dati[1], dati[2], Float.parseFloat(dati[3]));
-                listaSpells.add(s);
-                System.out.println("Spell caricata: " + s.getNome());
+                sceltaspell(riga);
+                
             }
 
         } catch (Exception e) {
@@ -228,7 +225,22 @@ public class Gamesystem {
         }
         return null; 
     }
-    
+    public void sceltaspell(String riga) {
+        String nome = dati[0].trim();
+        String desc = dati[1].trim();
+        String classe = dati[2].trim();
+        float costo = Float.parseFloat(dati[3].trim());
+        String tipo = dati[4].trim(); // DAMAGE o BUFF
+        float valore = Float.parseFloat(dati[5].trim());
+
+        Spell s;
+        if (tipo.equalsIgnoreCase("DAMAGE")) {
+            s = new SpellDmg(nome, desc, classe, costo, tipo, valore);
+        } else {
+            s = new SpellBuff(nome, desc, classe, costo, tipo, valore);
+        }
+        listaSpells.add(s);
+    }
     public void mostraMenu() {
 
     int scelta;

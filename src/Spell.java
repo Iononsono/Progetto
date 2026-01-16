@@ -3,13 +3,17 @@ public class Spell {
     String descrizione;
     String classe;
     float costoMP;
+    String tipo;
+    float valore;
 
 
-    public Spell(String nome, String descrizione, String classe, float costoMP) {
+    public Spell(String nome, String descrizione, String classe, float costoMP, String tipo, float valore) {
         this.nome = nome;
         this.descrizione = descrizione;
         this.classe = classe;
         this.costoMP = costoMP;
+        this.tipo = tipo;
+        this.valore = valore;
     }
 
     public String getNome() {
@@ -26,5 +30,12 @@ public class Spell {
 
     public float getCostoMP() {
         return costoMP;
+    }
+    public String getTipo() {
+        return tipo;
+    }
+    
+    public float getValore() {
+        return valore;
     }
 }
