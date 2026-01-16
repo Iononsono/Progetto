@@ -2,7 +2,7 @@
     "java.project.sourcePaths": ["src"],
     "java.project.outputPath": "bin",
     "java.project.referencedLibraries": [
-        "lib/*/.jar"
+        "lib/**/.jar"
     ],
     "configurations": [
         {
@@ -10,7 +10,7 @@
             "name": "App",
             "request": "launch",
             "mainClass": "App",
-            "projectName": "Progetto_eb89e2c8"
+            "projectName": "Progetto_67848677"
         }
     ]
 }

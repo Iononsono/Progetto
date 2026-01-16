@@ -82,19 +82,8 @@ public class Gamesystem {
         String FileEroe= "src/eroi.txt";
         String FileNemico= "src/nemici.txt";
         String FileSpell="src/spells.txt";
-
-        try (BufferedReader br = new BufferedReader(new FileReader(FileSpell))) {
-            String riga;
-            // Legge riga per riga finché il file non è vuoto
-            while ((riga = br.readLine()) != null) {
-                if (riga.trim().isEmpty()) continue; // Salta righe vuote
-                sceltaspell(riga);
-                
-            }
-
-        } catch (Exception e) {
-            System.err.println("Errore nel caricamento file: " + e.getMessage());
-        }
+        leggiFileSpells(FileSpell);
+        
 
         try (BufferedReader br = new BufferedReader(new FileReader(FileEroe))) {
             String riga;
@@ -225,21 +214,33 @@ public class Gamesystem {
         }
         return null; 
     }
-    public void sceltaspell(String riga) {
-        String nome = dati[0].trim();
-        String desc = dati[1].trim();
-        String classe = dati[2].trim();
-        float costo = Float.parseFloat(dati[3].trim());
-        String tipo = dati[4].trim(); // DAMAGE o BUFF
-        float valore = Float.parseFloat(dati[5].trim());
-
-        Spell s;
-        if (tipo.equalsIgnoreCase("DAMAGE")) {
-            s = new SpellDmg(nome, desc, classe, costo, tipo, valore);
-        } else {
-            s = new SpellBuff(nome, desc, classe, costo, tipo, valore);
+    public void leggiFileSpells(String FileSpell) {
+        try (BufferedReader br = new BufferedReader(new FileReader(FileSpell))) {
+            String riga;
+            
+            // Legge riga per riga finché il file non è vuoto
+            while ((riga = br.readLine()) != null) {
+                if (riga.trim().isEmpty()) continue; // Salta righe vuote
+                String[] dati = riga.split("\\|");
+                String nome = dati[0];
+                String desc = dati[1];
+                String classe = dati[2];
+                float costo = Float.parseFloat(dati[3]);
+                String tipo = dati[4]; // DAMAGE o BUFF
+                float valore = Float.parseFloat(dati[5]);
+                Spell s;
+            if (tipo.equalsIgnoreCase("DAMAGE")) {
+                s = new SpellDmg(nome, desc, classe, costo, tipo, valore);
+            } else {
+                s = new SpellBuff(nome, desc, classe, costo, tipo, valore);
+            }
+            listaSpells.add(s);     
+            }
+        } catch (Exception e) {
+            System.err.println("Errore nel caricamento file: " + e.getMessage());
         }
-        listaSpells.add(s);
+
+        
     }
     public void mostraMenu() {
 

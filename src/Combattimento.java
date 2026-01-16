@@ -20,7 +20,7 @@ public class Combattimento {
         avviaCombattimento();
     }
     public void avviaCombattimento() {
-        System.out.println("Inizio del combattimento tra " + e.getNome() + " e " + n.getNome());
+        System.out.println("Iniziao del combattimento tra " + e.getNome() + " e " + n.getNome());
 
         while (statsEroe.get("hp") > 0 && statsNemico.get("hp") > 0) {
             // Turno dell'eroe
@@ -41,18 +41,18 @@ public class Combattimento {
         System.out.println("Combattimento terminato.");
     }
    
-    public float calcoloDanno(float atk) {
+    public float calcoloDanno(float atk, String nome) {    
     Random random = new Random();
     // UC5: Il sistema effettua il tiro di dado 
     float r = random.nextInt(1,7); 
     
-    System.out.println("Lancio del dado: " + r); 
+    System.out.println("[" + nome + "] Lancio del dado: " + r); 
     
     float danno =atk+ atk * r/100;
     return (float) (Math.round(danno * 10.0) / 10.0); 
 }
 
-public void TurnoEroe() {
+    public void TurnoEroe() {
     // Implementa la logica del turno dell'eroe
     System.out.println("E' il turno di " + e.getNome() + ". Scegli un'azione:1) Attacca 2) Usa Spell");
     int sceltaEroe;
@@ -64,6 +64,9 @@ public void TurnoEroe() {
             System.out.println(e.getNome() + " sceglie di attaccare.");
             if(temp +10 > manaMax){
                 statsEroe.put("mp", manaMax);
+                float dannoEroe = calcoloDanno(statsEroe.get("atk"), e.getNome());
+                statsNemico.put("hp", statsNemico.get("hp") - dannoEroe);
+                System.out.printf("[Eroe]:%s attacca per %.1f danni.\nHP rimanenti per %s: %.1f\n",e.getNome(), dannoEroe, n.getNome(), statsNemico.get("hp"));                          
             }
             break;
         case 2:
@@ -74,16 +77,12 @@ public void TurnoEroe() {
             System.out.println("Scelta non valida. Attacco di default.");
             break;
     }
-    float dannoEroe = calcoloDanno(statsEroe.get("atk"));
-            statsNemico.put("hp", statsNemico.get("hp") - dannoEroe);
-            System.out.printf("[Eroe]:%s attacca per %.1f danni.\n"+
-            "HP rimanenti per %s: %.1f\n", 
-                          e.getNome(), dannoEroe, n.getNome(), statsNemico.get("hp"));
+    
     
 }
     public void TurnoNemico() {
     // Implementa la logica del turno del nemico
-    float dannoNemico = calcoloDanno(statsNemico.get("atk"));
+    float dannoNemico = calcoloDanno(statsNemico.get("atk"), n.getNome());
             statsEroe.put("hp", statsEroe.get("hp") - dannoNemico);
              System.out.printf("[Nemico]:%s attacca per %.1f danni.\n"+
             "HP rimanenti per %s: %.1f\n",
@@ -105,7 +104,8 @@ public void TurnoEroe() {
                 i++;
             }            
             }
-        int spellScelta = input.nextInt();            
+        int spellScelta = input.nextInt();   
+        input.nextLine(); // Consumare la nuova linea rimasta nel buffer         
         Spell s = e.getSpells().get(spellScelta);
         if(statsEroe.get("mp") >= s.getCostoMP()) {
             statsEroe.put("mp", statsEroe.get("mp") - s.getCostoMP());
@@ -122,6 +122,5 @@ public void TurnoEroe() {
                     System.out.println("MP insufficienti per usare " + s.getNome());
                     TurnoEroe();
                 }
-                return;
             }   
 }
