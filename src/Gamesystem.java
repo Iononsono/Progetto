@@ -11,9 +11,11 @@ public class Gamesystem {
     private Eroe er;
     private Nemico n;
     private Spell s;
+    private Equip eq;
     private List<Eroe> listaEroi = new ArrayList<>();
     private List<Nemico> listaNemici = new ArrayList<>();
     private List<Spell> listaSpells = new ArrayList<>();
+    private List<Equip> listaEquip = new ArrayList<>();
     private Scanner input= new Scanner(System.in);
     private String[] dati;
     private Combattimento c = null;
@@ -54,36 +56,91 @@ public class Gamesystem {
                 salvaSuFile(n);
                 System.out.println("Nemico creato: " + n.getNome() + " Classe: " + n.getClasse());
                 break;
+            case 2:
+                eq=creaEquip();
+                salvaSuFileEq(eq);
+                break;    
             default:
                 System.out.println("Scelta non valida.");
                 break;
            }
         } else {
             System.out.println("Benvenuto Player!");
-            System.out.println("Inserisci il nome del tuo eroe:");
-            input.nextLine(); 
-            nome = input.nextLine();   
-            System.out.println("Nome eroe scelto: " + nome);
-            System.out.println("Scegli la classe del tuo eroe: 1-Guerriero 2-Mago 3-Arciere");
-            classe = input.nextLine();
+            System.out.println("\n=== MENU PLAYER ===");
+            System.out.println("1 - Crea Personaggio");
+            System.out.println("2 - Equipaggia Oggetto");
+            System.out.println("0 - Esci");
+            System.out.print("Scelta: ");
+            scelta = input.nextInt();
+            input.nextLine();
+            switch (scelta) {
+                case 1:
+                    System.out.println("Inserisci il nome del tuo eroe:");
+                    input.nextLine(); 
+                    nome = input.nextLine();   
+                    System.out.println("Nome eroe scelto: " + nome);
+                    System.out.println("Scegli la classe del tuo eroe: 1-Guerriero 2-Mago 3-Arciere");
+                    classe = input.nextLine();
+                    Eroe er = new Eroe(nome, classe);
+                    listaEroi.add(er);
+                    salvaSuFile(er);
+                    break;
+                case 2:
+                    System.out.println("A quale personaggio vuoi equipaggiare l'oggetto ?");
+                    String nomeEroe = input.nextLine();
+                    er= trovaEroe(nomeEroe);
+                    er.stampaInv();
+                    int equipScelto=0;
+                    while(equipScelto!=-1){
+                    System.out.println("Scegli l'equipaggiamento da equipaggiare:");
+                    equipScelto = input.nextInt();
+                    input.nextLine();
+                    er.equipItem(equipScelto);
+                    }
+                    break;
+                case 0:
+                    System.out.println("Uscita dal menu player.");
+                    break;
+            }
             
-            //e = new Entita(nomeEroe, classeEroe);
-            //CREAZIONE EROE e.CreaEroe();   
-            Eroe er = new Eroe(nome, classe);
-            listaEroi.add(er);
-            salvaSuFile(er);
 
             
             
         }
     }
+    public void scegliEquipaggiamento() {
+    
+        System.out.println("Per quale eroe vuoi scegliere l'equipaggiamento?");
+        String nomeEroe = input.nextLine();
+        Eroe e= trovaEroe(nomeEroe);
+        if (e != null) {
+            stampaEquip();
+            int scelta=0;
+            while(scelta!=-1){
+            System.out.println("Scegli l'equipaggiamento da inserire nel inventario di " + e.getNome() + ":(-1 per uscire)");
+            scelta = input.nextInt();
+            Equip equipScelto = null;
+            if (scelta >= 0 && scelta < listaEquip.size()) {
+                equipScelto = listaEquip.get(scelta);
+                e.Inv.put(equipScelto, false); // Aggiunge l'equipaggiamento all'inventario come non equipaggiato
+            }else {
+                System.out.println("Ritorna al menu");
+            }
+        }
+    }else {
+            System.out.println("Eroe non trovato. Ritorna al menu.");
+        }
 
+            
+    }
     public void letturadatiFile() {
         String FileEroe= "src/eroi.txt";
         String FileNemico= "src/nemici.txt";
         String FileSpell="src/spells.txt";
+        String FileEquip="src/equip.txt";
         leggiFileSpells(FileSpell);
         
+
 
         try (BufferedReader br = new BufferedReader(new FileReader(FileEroe))) {
             String riga;
@@ -99,7 +156,7 @@ public class Gamesystem {
             }
 
         } catch (Exception e) {
-            System.err.println("Errore nel caricamento file: " + e.getMessage());
+            System.err.println("Errore nel caricamento file eroe: " + e.getMessage());
         }
 
         try (BufferedReader br = new BufferedReader(new FileReader(FileNemico))) {
@@ -115,10 +172,63 @@ public class Gamesystem {
             }
 
         } catch (Exception e) {
-            System.err.println("Errore nel caricamento file: " + e.getMessage());
+            System.err.println("Errore nel caricamento file nemico: " + e.getMessage());
         }
-    }
 
+        try (BufferedReader br = new BufferedReader(new FileReader(FileEquip))) {
+            String riga;
+            // Legge riga per riga finché il file non è vuoto
+            while ((riga = br.readLine()) != null) {
+                if (riga.trim().isEmpty()) continue; // Salta righe vuote
+
+                String[] dati = riga.split("\\|");
+               
+                eq= new Equip(dati[0], dati[1],dati[2], Integer.parseInt(dati[3]), Integer.parseInt(dati[4]), Integer.parseInt(dati[5]));
+                listaEquip.add(eq);
+                
+            }
+
+        } catch (Exception e) {
+            System.err.println("Errore nel caricamento file equip: " + e.getMessage());
+        } 
+    }
+    public Equip creaEquip() {
+                System.out.println("Inserisci il nome dell'equipaggiamento:");
+                input.nextLine(); 
+                String nomeEq = input.nextLine();
+                System.out.println("Inserisci il tipo di equipaggiamento (es. arma, armatura):");
+                String tipoEq= input.nextLine();
+                int sceltaClasse;
+                System.out.println("Specifica la classe per cui è destinato l'equipaggiamento:\n1-Guerriero\n2-Mago\n3-Arciere");
+                sceltaClasse= input.nextInt();
+                String classeEq;
+                switch(sceltaClasse){
+                    case 1:
+                        classeEq="Guerriero";
+                        break;
+                    case 2:
+                        classeEq="Mago";
+                        break;
+                    case 3:
+                        classeEq="Arciere";
+                        break;
+                    default:
+                        System.out.println("Scelta non valida. Impostazione classe Universale.");
+                        classeEq="Universale";
+                        break;
+                }
+                System.out.println("Inserisci il bonus ATK:");
+                int atkBonus= input.nextInt();
+                System.out.println("Inserisci il bonus HP:");
+                int hpBonus= input.nextInt();
+                System.out.println("Inserisci il bonus MP:");
+                int mpBonus= input.nextInt();
+                input.nextLine();
+                Equip eq=new Equip(nomeEq, tipoEq, classeEq, atkBonus, hpBonus, mpBonus);
+                listaEquip.add(eq); 
+                System.out.println("Equipaggiamento creato: " + eq.getNome() + " Tipo: " + eq.getTipo());
+                return eq;
+    }
     public void salvaSuFile(Entita en) {
         String FileEroe= "src/eroi.txt";
         String FileNemico= "src/nemici.txt";
@@ -147,7 +257,29 @@ public class Gamesystem {
             System.err.println("Errore durante il salvataggio: " + e.getMessage());
         }
     }
+    public void salvaSuFileEq(Equip eq) {
+        String FileEquip= "src/equip.txt";
         
+        try (FileWriter fw = new FileWriter(FileEquip, true); // 'true' aggiunge al file senza cancellare il vecchio
+             PrintWriter out = new PrintWriter(fw)) {
+            
+            // Recuperiamo i dati dall'equipaggiamento
+            String dati = String.format("%s|%s|%s|%d|%d|%d\n",
+                eq.getNome(),
+                eq.getTipo(),
+                eq.getClasse(),
+                eq.getAtkBonus(),
+                eq.getHpBonus(),
+                eq.getMpBonus()
+            );
+            
+            out.println(dati);
+            System.out.println("Salvataggio completato per l'equipaggiamento: " + eq.getNome());
+            
+        } catch (IOException e) {
+            System.err.println("Errore durante il salvataggio dell'equipaggiamento: " + e.getMessage());
+        }
+    }    
     
     public void mostraScheda() {
 
@@ -165,7 +297,13 @@ public class Gamesystem {
 
         
     }
-
+    public void stampaEquip() {
+        int i=0;
+        for (Equip eq : listaEquip) {
+            System.out.println(i + ")" + eq.getNome() + " (Tipo: " + eq.getTipo() + ", ATK: " + eq.getAtkBonus() + ", HP: " + eq.getHpBonus() + ", MP: " + eq.getMpBonus() + ")");
+            i++;
+        }
+    }
     public void stampaVeloce() {
         System.out.println("Lista Eroi:");
          for (Eroe e : listaEroi) {
@@ -248,14 +386,17 @@ public class Gamesystem {
 
     do {
         System.out.println("\n=== MENU PRINCIPALE ===");
-        System.out.println("1 - Crea personaggio");
+        System.out.println("1 - Inizia Avventura");
         System.out.println("2 - Mostra scheda personaggio");
         System.out.println("3 - Avvia combattimento");
         System.out.println("4 - Mostra tutti i personaggi");
+        System.err.println("5 - Mostra tutti gli equipaggiamenti");
+        System.out.println("6 - Scegli Equipaggiamento per Eroe");
         System.out.println("0 - Esci");
         System.out.print("Scelta: ");
 
-        scelta = Integer.parseInt(input.nextLine());
+        scelta = input.nextInt();
+        input.nextLine(); // Consumare la nuova linea rimasta nel buffer
 
         switch (scelta) {  
             case 1:
@@ -269,6 +410,13 @@ public class Gamesystem {
                 break;
             case 4:
                 stampaVeloce();
+                break;
+            case 5:
+                System.out.println("Lista Equipaggiamenti:");
+                stampaEquip();
+                break;
+            case 6:
+                scegliEquipaggiamento();
                 break;
             case 0:
                 System.out.println("Uscita dal gioco.");
