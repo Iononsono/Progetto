@@ -1,5 +1,5 @@
 import java.util.Scanner;
-public class BaseStats {
+public class BaseStats implements Statistiche {
     protected float hp,atk,mp;
     protected String classe;
     private static Scanner input = new Scanner(System.in);
@@ -57,9 +57,12 @@ public class BaseStats {
     public float checkStats(float hp, float atk, float mp){
         return hp + atk + mp;
     }
+    @Override public float getHp() { return hp; }
+    @Override public float getAtk() { return atk; }
+    @Override public float getMp() { return mp;}
 
     public void mostraStats() {
-        System.out.println("Statistiche finali per " + classe + ": HP " + hp + ", ATK " + atk + ", MP " + mp);
+        System.out.println("Statistiche finali per " + classe + ": HP " + getHp() + ", ATK " + getAtk() + ", MP " + getMp());
     }
 
     public void sommaStats(float hp, float atk, float mp) {

@@ -13,9 +13,6 @@ public abstract class Entita {
         this.classe=classe;
         
     }
-    /*public void CreaEroe() {
-        er = new Eroe(nome, classe);
-    }*/
     public void initBaseStats() {
        
     }
@@ -32,8 +29,6 @@ public abstract class Entita {
     public void mostraSchedaEntita() {
         System.out.println("Nome: " + getNome());
         System.out.println("Classe: " + getClasse());
-        System.out.println("Statistiche:"+getStats());
-
     }
     
 }

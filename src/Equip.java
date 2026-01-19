@@ -1,11 +1,11 @@
-public class Equip {
-    String nome;
-    String classe;
-    String tipo;// ARMOR o WEAPON
-    
-    int hpB, mpB, atkB;
+public class Equip extends EquipDecorator {
+    private String nome;
+    private String tipo;
+    private String classe;
+    private int atkB, hpB, mpB;
 
     public Equip(String nome, String tipo,String classe, int atkB, int hpB, int mpB) {
+        super(null);
         this.nome = nome;
         this.classe = classe;
         this.tipo = tipo;
@@ -14,6 +14,17 @@ public class Equip {
         this.mpB = mpB;
 
     }
+    public Equip(Statistiche componente, String nome, String tipo,String classe, int atkB, int hpB, int mpB) {
+        super(componente);
+        this.nome = nome;
+        this.classe = classe;
+        this.tipo = tipo;
+        this.atkB = atkB;
+        this.hpB = hpB;
+        this.mpB = mpB;
+
+    }
+  
 
     public String getNome() {
         return nome;
@@ -32,6 +43,20 @@ public class Equip {
     }
     public int getMpBonus() {
         return mpB;
+    }
+    @Override
+    public float getAtk() {
+        return componente.getAtk() + atkB;
+    }
+
+    @Override
+    public float getHp() {
+        return componente.getHp() + hpB;
+    }
+
+    @Override
+    public float getMp() {
+        return componente.getMp() + mpB;
     }
 
     

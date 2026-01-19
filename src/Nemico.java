@@ -40,4 +40,8 @@ protected float hp,atk,mp;
         stats.put("mp", mp);
         
     }
+    public void mostraSchedaEntita() {
+        super.mostraSchedaEntita();
+        System.out.println("STATISTICHE: "+ getStats());
+    }
 }

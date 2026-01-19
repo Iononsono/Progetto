@@ -193,41 +193,41 @@ public class Gamesystem {
         } 
     }
     public Equip creaEquip() {
-                System.out.println("Inserisci il nome dell'equipaggiamento:");
-                input.nextLine(); 
-                String nomeEq = input.nextLine();
-                System.out.println("Inserisci il tipo di equipaggiamento (es. arma, armatura):");
-                String tipoEq= input.nextLine();
-                int sceltaClasse;
-                System.out.println("Specifica la classe per cui è destinato l'equipaggiamento:\n1-Guerriero\n2-Mago\n3-Arciere");
-                sceltaClasse= input.nextInt();
-                String classeEq;
-                switch(sceltaClasse){
-                    case 1:
-                        classeEq="Guerriero";
-                        break;
-                    case 2:
-                        classeEq="Mago";
-                        break;
-                    case 3:
-                        classeEq="Arciere";
-                        break;
-                    default:
-                        System.out.println("Scelta non valida. Impostazione classe Universale.");
-                        classeEq="Universale";
-                        break;
+            System.out.println("Inserisci il nome dell'equipaggiamento:");
+            input.nextLine(); 
+            String nomeEq = input.nextLine();
+            System.out.println("Inserisci il tipo di equipaggiamento (es. arma, armatura):");
+            String tipoEq= input.nextLine();
+            int sceltaClasse;
+            System.out.println("Specifica la classe per cui è destinato l'equipaggiamento:\n1-Guerriero\n2-Mago\n3-Arciere");
+            sceltaClasse= input.nextInt();
+            String classeEq;
+            switch(sceltaClasse){
+                case 1:
+                    classeEq="Guerriero";
+                    break;
+                case 2:
+                    classeEq="Mago";
+                    break;
+                case 3:
+                    classeEq="Arciere";
+                    break;
+                default:
+                    System.out.println("Scelta non valida. Impostazione classe Universale.");
+                    classeEq="Universale";
+                    break;
                 }
-                System.out.println("Inserisci il bonus ATK:");
-                int atkBonus= input.nextInt();
-                System.out.println("Inserisci il bonus HP:");
-                int hpBonus= input.nextInt();
-                System.out.println("Inserisci il bonus MP:");
-                int mpBonus= input.nextInt();
-                input.nextLine();
-                Equip eq=new Equip(nomeEq, tipoEq, classeEq, atkBonus, hpBonus, mpBonus);
-                listaEquip.add(eq); 
-                System.out.println("Equipaggiamento creato: " + eq.getNome() + " Tipo: " + eq.getTipo());
-                return eq;
+            System.out.println("Inserisci il bonus ATK:");
+            int atkBonus= input.nextInt();
+            System.out.println("Inserisci il bonus HP:");
+            int hpBonus= input.nextInt();
+            System.out.println("Inserisci il bonus MP:");
+            int mpBonus= input.nextInt();
+            input.nextLine();
+            Equip eq=new Equip(nomeEq, tipoEq, classeEq, atkBonus, hpBonus, mpBonus);
+            listaEquip.add(eq); 
+            System.out.println("Equipaggiamento creato: " + eq.getNome() + " Tipo: " + eq.getTipo());
+            return eq;
     }
     public void salvaSuFile(Entita en) {
         String FileEroe= "src/eroi.txt";
@@ -238,10 +238,9 @@ public class Gamesystem {
         }
         else  File = FileEroe;
         
-        try (FileWriter fw = new FileWriter(File, true); // 'true' aggiunge al file senza cancellare il vecchio
+        try (FileWriter fw = new FileWriter(File, true); 
              PrintWriter out = new PrintWriter(fw)) {
             
-            // Recuperiamo i dati dall'eroe (coerente con UC1 e UC12)
             String dati = String.format("%s|%s|%.1f|%.1f|%.1f\n",
                 en.getNome(),
                 en.getClasse(),
@@ -306,15 +305,13 @@ public class Gamesystem {
     }
     public void stampaVeloce() {
         System.out.println("Lista Eroi:");
-         for (Eroe e : listaEroi) {
-        System.out.println("- " + e.getNome() + " (Classe: " + e.getClasse() + ")");
+        for (Eroe e : listaEroi) {
+            System.out.println("- " + e.getNome() + " (Classe: " + e.getClasse() + ")");
          }
-          System.out.println("Lista Nemici:");
-         for (Nemico n : listaNemici) {
-        System.out.println("- " + n.getNome() + " (Classe: " + n.getClasse() + ")");
+        System.out.println("Lista Nemici:");
+        for (Nemico n : listaNemici) {
+            System.out.println("- " + n.getNome() + " (Classe: " + n.getClasse() + ")");
          }
-    
-    //listaNemici.forEach(System.out::println);
     }
     public void avviaCombattimento() {
         System.out.println("Quale eroe vuoi fare combattere?");
@@ -355,8 +352,6 @@ public class Gamesystem {
     public void leggiFileSpells(String FileSpell) {
         try (BufferedReader br = new BufferedReader(new FileReader(FileSpell))) {
             String riga;
-            
-            // Legge riga per riga finché il file non è vuoto
             while ((riga = br.readLine()) != null) {
                 if (riga.trim().isEmpty()) continue; // Salta righe vuote
                 String[] dati = riga.split("\\|");
