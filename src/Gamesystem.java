@@ -322,7 +322,7 @@ public class Gamesystem {
             Nemico n= listaNemici.get(0); // Per semplicità, selezioniamo il primo nemico della lista
             if (n != null) {
                 c=new Combattimento(e, n);
-                
+                c.avviaCombattimento();
                 // Implementa la logica del combattimento qui
             } else {
                 System.out.println("Nemico non trovato.");

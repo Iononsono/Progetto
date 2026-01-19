@@ -13,14 +13,19 @@ public class Combattimento {
 
     public Combattimento(Eroe e, Nemico n) {
         this.e = e;
-        this.manaMax= e.getStats().get("mp");//max per questo personaggio
+        this.manaMax = e.statsTot.getMp(); //mana max combattimento
         this.n = n;
-        this.statsEroe = new HashMap<>(e.getStats());
+        float hpDecorati = e.statsTot.getHp();
+        float atkDecorati = e.statsTot.getAtk();
+        float mpDecorati = e.statsTot.getMp();
+        this.statsEroe = new HashMap<>();
         this.statsNemico = new HashMap<>(n.getStats());
-        avviaCombattimento();
+        this.statsEroe.put("hp", hpDecorati);
+        this.statsEroe.put("atk", atkDecorati);
+        this.statsEroe.put("mp", mpDecorati);
     }
     public void avviaCombattimento() {
-        System.out.println("Iniziao del combattimento tra " + e.getNome() + " e " + n.getNome());
+        System.out.println("Inizio del combattimento tra " + e.getNome() + " e " + n.getNome());
 
         while (statsEroe.get("hp") > 0 && statsNemico.get("hp") > 0) {
             // Turno dell'eroe
