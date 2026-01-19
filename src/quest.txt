@@ -1,0 +1,3 @@
+Sterminio Lupi|Uccidi i lupi che terrorizzano il villaggio|Uccisione|Lupo|5
+Vendetta dell'Arciere|Sconfiggi gli arcieri scheletro nelle rovine|Uccisione|Arciere Scheletro|3
+Cacciatore di Boss|Sconfiggi il Re Orco nella caverna profonda|Uccisione|Re Orco|1

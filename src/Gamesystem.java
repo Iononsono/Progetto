@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.Scanner;
 
 public class Gamesystem {
@@ -12,12 +13,14 @@ public class Gamesystem {
     private Nemico n;
     private Spell s;
     private Equip eq;
+    private Quest q;    
     private List<Eroe> listaEroi = new ArrayList<>();
     private List<Nemico> listaNemici = new ArrayList<>();
     private List<Spell> listaSpells = new ArrayList<>();
     private List<Equip> listaEquip = new ArrayList<>();
     private Scanner input= new Scanner(System.in);
     private String[] dati;
+    private List<Quest> listaQuest = new ArrayList<>();
     private Combattimento c = null;
     public Gamesystem() {
        
@@ -40,8 +43,10 @@ public class Gamesystem {
         int Attore = input.nextInt();
         if(Attore == 0){
            System.out.println("Benvenuto Admin!");
-           System.out.println("Cosa vuoi fare?\n1-Crea Nemico\n"+
-            "2-Crea Equipaggiamento");
+           System.out.println("\n=== MENU Admin ===");
+           System.out.println("1 - Crea Nemico");
+           System.out.println("2 - Crea Equipaggiamento");
+           System.out.println("3 - Crea Quest");
            scelta = input.nextInt();
            switch(scelta){
     
@@ -60,8 +65,9 @@ public class Gamesystem {
                 eq=creaEquip();
                 salvaSuFileEq(eq);
                 break;    
-            default:
-                System.out.println("Scelta non valida.");
+            case 3:
+                q=creaQuest();
+                salvasuFileQ(q);
                 break;
            }
         } else {
@@ -69,14 +75,14 @@ public class Gamesystem {
             System.out.println("\n=== MENU PLAYER ===");
             System.out.println("1 - Crea Personaggio");
             System.out.println("2 - Equipaggia Oggetto");
+            System.out.println("3 - Avvia Combattimento");
             System.out.println("0 - Esci");
             System.out.print("Scelta: ");
             scelta = input.nextInt();
             input.nextLine();
             switch (scelta) {
                 case 1:
-                    System.out.println("Inserisci il nome del tuo eroe:");
-                    input.nextLine(); 
+                    System.out.println("Inserisci il nome del tuo eroe:"); 
                     nome = input.nextLine();   
                     System.out.println("Nome eroe scelto: " + nome);
                     System.out.println("Scegli la classe del tuo eroe: 1-Guerriero 2-Mago 3-Arciere");
@@ -97,6 +103,9 @@ public class Gamesystem {
                     input.nextLine();
                     er.equipItem(equipScelto);
                     }
+                    break;
+                case 3:
+                    avviaCombattimento();
                     break;
                 case 0:
                     System.out.println("Uscita dal menu player.");
@@ -229,6 +238,25 @@ public class Gamesystem {
             System.out.println("Equipaggiamento creato: " + eq.getNome() + " Tipo: " + eq.getTipo());
             return eq;
     }
+    public Quest creaQuest(){
+        System.out.println("Inserisci nome della quest:");
+        String titoloQuest = input.nextLine();
+        System.out.println("Inserisci la descrizione:");
+        String descQuest = input.nextLine();
+        System.out.println("Inserire l'obbiettivo della quest:[UCCISIONE/....]");
+        String obQuest= input.nextLine();
+        System.out.println("Inserire il Target[LIVELLO/<NEMICO>]:");
+        String targetQuest = input.nextLine();
+        System.out.println("Inserire il numuero per il target scelto:");
+        int numTargQuest = input.nextInt();
+        System.out.println("Premio casuale o specifico? [-1/Numero equipaggiamento]");
+        stampaEquip();
+        int premioScelto = input.nextInt();
+        Random random = new Random();
+        q=new Quest(titoloQuest,descQuest,obQuest, targetQuest, numTargQuest,premioScelto == -1 ? listaEquip.get(random.nextInt(listaEquip.size())) : null);
+        listaQuest.add(q);
+        return q;
+    }
     public void salvaSuFile(Entita en) {
         String FileEroe= "src/eroi.txt";
         String FileNemico= "src/nemici.txt";
@@ -279,7 +307,29 @@ public class Gamesystem {
             System.err.println("Errore durante il salvataggio dell'equipaggiamento: " + e.getMessage());
         }
     }    
-    
+    public void salvasuFileQ(Quest q) {
+        String FileQuest= "src/quest.txt";
+        
+        try (FileWriter fw = new FileWriter(FileQuest, true); // 'true' aggiunge al file senza cancellare il vecchio
+             PrintWriter out = new PrintWriter(fw)) {
+            
+            // Recuperiamo i dati dalla quest
+            String dati = String.format("%s|%s|%s|%s|%d\n",
+                q.getTitolo(),
+                q.getDescrizione(),
+                q.getObbiettivoDesc(),
+                q.getTarget(),
+                q.getQuantita()
+                //q.getPremio() != null ? q.getPremio().getNome() : "Nessun Premio"
+            );
+            
+            out.println(dati);
+            System.out.println("Salvataggio completato per la quest: " + q.getTitolo());
+            
+        } catch (IOException e) {
+            System.err.println("Errore durante il salvataggio della quest: " + e.getMessage());
+        }
+    }   
     public void mostraScheda() {
 
         System.out.println("Di quale personaggio vuoi vedere la scheda?");
@@ -383,10 +433,9 @@ public class Gamesystem {
         System.out.println("\n=== MENU PRINCIPALE ===");
         System.out.println("1 - Inizia Avventura");
         System.out.println("2 - Mostra scheda personaggio");
-        System.out.println("3 - Avvia combattimento");
-        System.out.println("4 - Mostra tutti i personaggi");
-        System.err.println("5 - Mostra tutti gli equipaggiamenti");
-        System.out.println("6 - Scegli Equipaggiamento per Eroe");
+        System.out.println("3 - Mostra tutti i personaggi");
+        System.err.println("4 - Mostra tutti gli equipaggiamenti");
+        System.out.println("5 - Scegli Equipaggiamento per Eroe");
         System.out.println("0 - Esci");
         System.out.print("Scelta: ");
 
@@ -401,16 +450,13 @@ public class Gamesystem {
                 mostraScheda();
                 break;
             case 3:
-                avviaCombattimento();
-                break;
-            case 4:
                 stampaVeloce();
                 break;
-            case 5:
+            case 4:
                 System.out.println("Lista Equipaggiamenti:");
                 stampaEquip();
                 break;
-            case 6:
+            case 5:
                 scegliEquipaggiamento();
                 break;
             case 0:
