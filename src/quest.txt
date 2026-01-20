@@ -1,3 +1,5 @@
-Sterminio Lupi|Uccidi i lupi che terrorizzano il villaggio|Uccisione|Lupo|5
-Vendetta dell'Arciere|Sconfiggi gli arcieri scheletro nelle rovine|Uccisione|Arciere Scheletro|3
-Cacciatore di Boss|Sconfiggi il Re Orco nella caverna profonda|Uccisione|Re Orco|1
+Sterminio Lupi|Uccidi i lupi che terrorizzano il villaggio|KILL|goblin|5|Armatura a Piastre
+Vendetta dell'Arciere|Sconfiggi gli arcieri scheletro nelle rovine|KILL|goblin|3|Scudo Pesante
+Cacciatore di Boss|Sconfiggi il Re Orco nella caverna profonda|KILL|goblin|1|Anello del Potere
+Quest di prova|Desc|KILL|goblin|5|Armatura a Piastre
+

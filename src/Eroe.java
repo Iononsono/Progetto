@@ -7,6 +7,7 @@ public class Eroe extends Entita {
     protected String classeN;
     protected Statistiche statsTot;
     private List<Spell> SpellsEroe = new ArrayList<>();
+    private List<Quest> QuestsEroe = new ArrayList<>();
     public Map<Equip,Boolean> Inv = new HashMap<>();
     private BaseStats bs;
 
@@ -71,7 +72,27 @@ public class Eroe extends Entita {
         }
         
     }
-    
+    public void accettaQuest(List<Quest> listaQuests){
+        int i=0;
+        Quest qe= null;
+       for(Quest q : listaQuests) {
+        System.out.print(i+")");
+        q.stampaQuest();
+        i++;
+        }
+        System.out.println("Seleziona Quest");
+        int index=input.nextInt();
+        input.nextLine();
+        QuestsEroe.add(listaQuests.get(index));
+        System.out.println("Quest "+listaQuests.get(index).getTitolo()+" accettata buona fortuna."); 
+    }
+    public void controllaQuest(Object evento){
+        for(Quest q : QuestsEroe) {
+        q.aggiorna(evento);
+            
+        }    
+
+    }
     public void equipItem(int index) {
     if (index >= 0 && index < Inv.size()) {
         List<Equip> keys = new ArrayList<>(Inv.keySet());

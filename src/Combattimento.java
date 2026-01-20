@@ -32,6 +32,7 @@ public class Combattimento {
             TurnoEroe();
             if (statsNemico.get("hp") <= 0) {
                 System.out.println(n.getNome() + " è stato sconfitto!");
+                e.controllaQuest(n.getClasse());
                 break;
             }
 

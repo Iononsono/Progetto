@@ -48,11 +48,10 @@ public class Gamesystem {
            System.out.println("2 - Crea Equipaggiamento");
            System.out.println("3 - Crea Quest");
            scelta = input.nextInt();
+           input.nextLine(); 
            switch(scelta){
-    
             case 1:
                 System.out.println("Inserisci il nome del nemico:");
-                input.nextLine(); 
                 nome = input.nextLine();
                 System.out.println("Specifica se il nemico è un boss o un goblin:");
                 classe= input.nextLine();
@@ -76,6 +75,7 @@ public class Gamesystem {
             System.out.println("1 - Crea Personaggio");
             System.out.println("2 - Equipaggia Oggetto");
             System.out.println("3 - Avvia Combattimento");
+            System.out.println("4 - Accetta Quest");
             System.out.println("0 - Esci");
             System.out.print("Scelta: ");
             scelta = input.nextInt();
@@ -106,6 +106,9 @@ public class Gamesystem {
                     break;
                 case 3:
                     avviaCombattimento();
+                    break;
+                case 4:
+                    accettaQuest();
                     break;
                 case 0:
                     System.out.println("Uscita dal menu player.");
@@ -147,6 +150,7 @@ public class Gamesystem {
         String FileNemico= "src/nemici.txt";
         String FileSpell="src/spells.txt";
         String FileEquip="src/equip.txt";
+        String FileQuest="src/quest.txt";
         leggiFileSpells(FileSpell);
         
 
@@ -199,8 +203,28 @@ public class Gamesystem {
 
         } catch (Exception e) {
             System.err.println("Errore nel caricamento file equip: " + e.getMessage());
-        } 
+        }
+
+         try (BufferedReader br = new BufferedReader(new FileReader(FileQuest))) {
+            String riga;
+            // Legge riga per riga finché il file non è vuoto
+            while ((riga = br.readLine()) != null) {
+                if (riga.trim().isEmpty()) continue; // Salta righe vuote
+
+                String[] dati = riga.split("\\|");
+                
+                
+                q= new Quest(dati[0], dati[1],dati[2],dati[3], Integer.parseInt(dati[4]),trovaEquip(dati[5]));
+                listaQuest.add(q);
+                System.out.println("Add quest:"+q.getTitolo());
+            }
+
+        } catch (Exception e) {
+            System.err.println("Errore nel caricamento file eroe: " + e.getMessage());
+        }
     }
+
+
     public Equip creaEquip() {
             System.out.println("Inserisci il nome dell'equipaggiamento:");
             input.nextLine(); 
@@ -243,7 +267,7 @@ public class Gamesystem {
         String titoloQuest = input.nextLine();
         System.out.println("Inserisci la descrizione:");
         String descQuest = input.nextLine();
-        System.out.println("Inserire l'obbiettivo della quest:[UCCISIONE/....]");
+        System.out.println("Inserire l'obbiettivo della quest:[KILL/....]");
         String obQuest= input.nextLine();
         System.out.println("Inserire il Target[LIVELLO/<NEMICO>]:");
         String targetQuest = input.nextLine();
@@ -253,7 +277,12 @@ public class Gamesystem {
         stampaEquip();
         int premioScelto = input.nextInt();
         Random random = new Random();
-        q=new Quest(titoloQuest,descQuest,obQuest, targetQuest, numTargQuest,premioScelto == -1 ? listaEquip.get(random.nextInt(listaEquip.size())) : null);
+    
+        if(premioScelto==-1){
+        premioScelto=random.nextInt(listaEquip.size());
+        }
+        Equip eq=listaEquip.get(premioScelto); 
+        q=new Quest(titoloQuest,descQuest,obQuest, targetQuest, numTargQuest,eq);
         listaQuest.add(q);
         return q;
     }
@@ -314,13 +343,13 @@ public class Gamesystem {
              PrintWriter out = new PrintWriter(fw)) {
             
             // Recuperiamo i dati dalla quest
-            String dati = String.format("%s|%s|%s|%s|%d\n",
+            String dati = String.format("%s|%s|%s|%s|%d|%s\n",
                 q.getTitolo(),
                 q.getDescrizione(),
                 q.getObbiettivoDesc(),
                 q.getTarget(),
-                q.getQuantita()
-                //q.getPremio() != null ? q.getPremio().getNome() : "Nessun Premio"
+                q.getQuantita(),
+                q.getPremio().getNome()
             );
             
             out.println(dati);
@@ -382,7 +411,18 @@ public class Gamesystem {
         }
         
     }
-
+    public void accettaQuest(){
+    System.out.println("Quale Eroe vuole accettare la Quest?");    
+    String nomeEroe=input.nextLine();
+    er=trovaEroe(nomeEroe);   
+    er.accettaQuest(listaQuest); 
+    }
+    public Equip trovaEquip(String dati){
+        for(Equip q: listaEquip){
+            if(q.getNome().equals(dati)) return q;
+        }
+        return null;
+    }
     public Eroe trovaEroe(String nome) {
         for (Eroe e : listaEroi) {
             if (e.getNome().equals(nome)) {

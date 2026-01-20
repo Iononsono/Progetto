@@ -26,6 +26,12 @@ public class Quest {
             }
         }
     }
+
+    public void stampaQuest()
+    {
+
+          System.out.println("Titolo: "+getTitolo()+" Desc: "+getDescrizione()+" Ogg: "+getObbiettivoDesc()+" Quantita: "+getQuantita()+" Target: "+getTarget()+" premio: "+getPremio().getNome());
+    }
     public String getStato() {
         return titolo + " - " + obiettivo.getDescrizione() + (completata ? " [PRONTA]" : "");
     }
@@ -53,5 +59,8 @@ public class Quest {
             return ((ObiettivoKill) obiettivo).getNecessari();
         }
         return null;
+    }
+    public Equip getPremio(){
+    return premio;   
     }
 }
