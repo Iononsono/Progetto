@@ -70,11 +70,11 @@ public class Combattimento {
     switch(sceltaEroe) {
         case 1:
             System.out.println(e.getNome() + " sceglie di attaccare.");
+            float dannoEroe = calcoloDanno(statsEroe.get("atk"), e.getNome());
+            statsNemico.put("hp", statsNemico.get("hp") - dannoEroe);
+            System.out.printf("[%s] attacca per %.1f danni.\nHP rimanenti per [%s]: %.1f\n",e.getNome(), dannoEroe, n.getNome(), statsNemico.get("hp"));
             if(temp +10 > manaMax){
-                statsEroe.put("mp", manaMax);
-                float dannoEroe = calcoloDanno(statsEroe.get("atk"), e.getNome());
-                statsNemico.put("hp", statsNemico.get("hp") - dannoEroe);
-                System.out.printf("[%s] attacca per %.1f danni.\nHP rimanenti per [%s]: %.1f\n",e.getNome(), dannoEroe, n.getNome(), statsNemico.get("hp"));                          
+                statsEroe.put("mp", manaMax);                          
             }
             break;
         case 2:

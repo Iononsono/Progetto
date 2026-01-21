@@ -43,21 +43,20 @@ public class Quest {
         return obiettivo;
     }
     public String getProgressBar() {
-    int totale = obiettivo.getTotale();
-    int corrente = obiettivo.getCorrente();
-    int dimensioneBarra = 10; // Lunghezza della barra in caratteri
+        int totale = obiettivo.getTotale();
+        int corrente = obiettivo.getCorrente();
+        int dimensioneBarra = 10; // Lunghezza della barra in caratteri
     
-    // Calcolo della percentuale (evitando divisioni per zero)
-    float percentuale = (totale > 0) ? (float) corrente / totale : 0;
-    int riempimento = (int) (percentuale * dimensioneBarra);
+        // Calcolo della percentuale (evitando divisioni per zero)
+        float percentuale = (totale > 0) ? (float) corrente / totale : 0;
+        int riempimento = (int) (percentuale * dimensioneBarra);
     
-    StringBuilder barra = new StringBuilder("[");
-    for (int i = 0; i < dimensioneBarra; i++) {
-        if (i < riempimento) barra.append("#"); // Parte completata
-        else barra.append("-");                // Parte mancante
-    }
-    barra.append("] ").append((int)(percentuale * 100)).append("%");
-    
-    return barra.toString();
+        StringBuilder barra = new StringBuilder("[");
+        for (int i = 0; i < dimensioneBarra; i++) {
+            if (i < riempimento) barra.append("#"); // Parte completata
+            else barra.append("-");                // Parte mancante
+        }
+        barra.append("] ").append((int)(percentuale * 100)).append("%");
+        return barra.toString();
     }
 }
