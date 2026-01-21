@@ -1,4 +1,6 @@
-public class Spell {
+import java.util.Map;
+
+public abstract class Spell {
     String nome;
     String descrizione;
     String classe;
@@ -15,6 +17,7 @@ public class Spell {
         this.tipo = tipo;
         this.valore = valore;
     }
+    public abstract void applicaEffetto(Map<String, Float> statsUtilizzatore, Map<String, Float> statsBersaglio);
 
     public String getNome() {
         return nome;
@@ -38,4 +41,5 @@ public class Spell {
     public float getValore() {
         return valore;
     }
+    public abstract String getDescCombat();
 }

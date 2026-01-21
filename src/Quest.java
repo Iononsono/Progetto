@@ -6,14 +6,11 @@ public class Quest {
     private Equip premio;
     private boolean premioRiscattato;
 
-    public Quest(String titolo, String descrizione, String obiettivo, String target, int quantita, Equip premio) {
+    public Quest(String titolo, String descrizione, ObiettivoStrategy obiettivo, Equip premio) {
         this.titolo = titolo;
         this.descrizione = descrizione;
-        if(obiettivo.equals("KILL")){
-            this.obiettivo = new ObiettivoKill(target, quantita);
-        }
+        this.obiettivo = obiettivo;
         this.completata = false;
-        this.premioRiscattato = false;
         this.premio = premio;
     }
 
@@ -27,15 +24,9 @@ public class Quest {
         }
     }
 
-    public void stampaQuest()
-    {
-
-          System.out.println("Titolo: "+getTitolo()+" Desc: "+getDescrizione()+" Ogg: "+getObbiettivoDesc()+" Quantita: "+getQuantita()+" Target: "+getTarget()+" premio: "+getPremio().getNome());
-    }
-    public String getStato() {
-        return titolo + " - " + obiettivo.getDescrizione() + (completata ? " [PRONTA]" : "");
-    }
-    
+    public void stampaQuest(){
+        System.out.println("Titolo: "+getTitolo()+" Desc: "+getDescrizione()+" Premio: "+getPremio().getNome());
+    }   
     public boolean isCompletata() { 
         return completata; 
     }
@@ -44,21 +35,6 @@ public class Quest {
     }
     public String getDescrizione() {
         return descrizione;
-    }
-    public String getObbiettivoDesc() {
-        return obiettivo.getObiettivoDesc();
-    }
-    public String getTarget() {
-        if(obiettivo instanceof ObiettivoKill) {
-            return ((ObiettivoKill) obiettivo).getNomeNemicoTarget();
-        }
-        return "";
-    }
-    public Integer getQuantita() {
-        if(obiettivo instanceof ObiettivoKill) {
-            return ((ObiettivoKill) obiettivo).getNecessari();
-        }
-        return null;
     }
     public Equip getPremio(){
     return premio;   

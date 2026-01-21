@@ -1,7 +1,7 @@
 public interface ObiettivoStrategy {
+    void aggiorna(Object evento);
     boolean isCompletato();
-    // Passiamo un oggetto o dei parametri per permettere alla strategia di controllare
-    void aggiorna(Object evento); 
-    String getDescrizione();
-    String getObiettivoDesc();
+    String getDescrizione(); // Descrizione (es: "Uccidi Orchi")
+    int getCorrente();         // Progresso attuale
+    int getTotale();
 }

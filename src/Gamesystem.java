@@ -18,7 +18,7 @@ public class Gamesystem {
     private List<Nemico> listaNemici = new ArrayList<>();
     private List<Spell> listaSpells = new ArrayList<>();
     private List<Equip> listaEquip = new ArrayList<>();
-    private Scanner input= new Scanner(System.in);
+    protected static final Scanner input = new Scanner(System.in);
     private String[] dati;
     private List<Quest> listaQuest = new ArrayList<>();
     private Combattimento c = null;
@@ -94,14 +94,15 @@ public class Gamesystem {
                 case 2:
                     System.out.println("A quale personaggio vuoi equipaggiare l'oggetto ?");
                     String nomeEroe = input.nextLine();
-                    er= trovaEroe(nomeEroe);
-                    er.stampaInv();
+                    Entita e= trovaEntita(nomeEroe);
+                    Eroe ero=(Eroe) e;
+                    ero.stampaInv();
                     int equipScelto=0;
                     while(equipScelto!=-1){
                     System.out.println("Scegli l'equipaggiamento da equipaggiare:");
                     equipScelto = input.nextInt();
                     input.nextLine();
-                    er.equipItem(equipScelto);
+                    ero.equipItem(equipScelto);
                     }
                     break;
                 case 3:
@@ -124,8 +125,9 @@ public class Gamesystem {
     
         System.out.println("Per quale eroe vuoi scegliere l'equipaggiamento?");
         String nomeEroe = input.nextLine();
-        Eroe e= trovaEroe(nomeEroe);
-        if (e != null) {
+        Entita e= trovaEntita(nomeEroe);
+        Eroe ero=(Eroe) e;
+        if (ero != null) {
             stampaEquip();
             int scelta=0;
             while(scelta!=-1){
@@ -134,7 +136,7 @@ public class Gamesystem {
             Equip equipScelto = null;
             if (scelta >= 0 && scelta < listaEquip.size()) {
                 equipScelto = listaEquip.get(scelta);
-                e.Inv.put(equipScelto, false); // Aggiunge l'equipaggiamento all'inventario come non equipaggiato
+                ero.Inv.put(equipScelto, false); // Aggiunge l'equipaggiamento all'inventario come non equipaggiato
             }else {
                 System.out.println("Ritorna al menu");
             }
@@ -213,8 +215,7 @@ public class Gamesystem {
 
                 String[] dati = riga.split("\\|");
                 
-                
-                q= new Quest(dati[0], dati[1],dati[2],dati[3], Integer.parseInt(dati[4]),trovaEquip(dati[5]));
+                q = QuestFactory.crea(dati[0], dati[1], dati[2], dati[3], Integer.parseInt(dati[4]), trovaEquip(dati[5]));
                 listaQuest.add(q);
                 System.out.println("Add quest:"+q.getTitolo());
             }
@@ -223,7 +224,6 @@ public class Gamesystem {
             System.err.println("Errore nel caricamento file eroe: " + e.getMessage());
         }
     }
-
 
     public Equip creaEquip() {
             System.out.println("Inserisci il nome dell'equipaggiamento:");
@@ -281,8 +281,8 @@ public class Gamesystem {
         if(premioScelto==-1){
         premioScelto=random.nextInt(listaEquip.size());
         }
-        Equip eq=listaEquip.get(premioScelto); 
-        q=new Quest(titoloQuest,descQuest,obQuest, targetQuest, numTargQuest,eq);
+        Equip eq=listaEquip.get(premioScelto);
+        Quest q = QuestFactory.crea(titoloQuest,descQuest,obQuest, targetQuest, numTargQuest,eq); 
         listaQuest.add(q);
         return q;
     }
@@ -360,20 +360,14 @@ public class Gamesystem {
         }
     }   
     public void mostraScheda() {
-
         System.out.println("Di quale personaggio vuoi vedere la scheda?");
         String nomeEroe = input.nextLine();
-        Eroe e= trovaEroe(nomeEroe);
-        Nemico n= trovaNemico(nomeEroe);
+        Entita e= trovaEntita(nomeEroe);
         if (e != null) {
             e.mostraSchedaEntita();
-        }else if (n!=null){
-            n.mostraSchedaEntita();
         }else {
             System.out.println("Personaggio non trovato.");
         }     
-
-        
     }
     public void stampaEquip() {
         int i=0;
@@ -395,14 +389,14 @@ public class Gamesystem {
     public void avviaCombattimento() {
         System.out.println("Quale eroe vuoi fare combattere?");
         String nomeEroe = input.nextLine();
-        Eroe e= trovaEroe(nomeEroe);
-        if (e != null) {
+        Entita e= trovaEntita(nomeEroe);
+        Eroe ero=(Eroe) e;
+        if (ero != null) {
             System.out.println("Con quale nemico vuoi far combattere " + e.getNome() + "?");;
             Nemico n= listaNemici.get(0); // Per semplicità, selezioniamo il primo nemico della lista
             if (n != null) {
-                c=new Combattimento(e, n);
+                c=new Combattimento(ero, n);
                 c.avviaCombattimento();
-                // Implementa la logica del combattimento qui
             } else {
                 System.out.println("Nemico non trovato.");
             }
@@ -423,15 +417,12 @@ public class Gamesystem {
         }
         return null;
     }
-    public Eroe trovaEroe(String nome) {
+    public Entita trovaEntita(String nome) {
         for (Eroe e : listaEroi) {
             if (e.getNome().equals(nome)) {
                 return e;
             }
         }
-        return null; 
-    }
-    public Nemico trovaNemico(String nome) {
         for (Nemico n : listaNemici) {
             if (n.getNome().equals(nome)) {
                 return n;
@@ -439,12 +430,14 @@ public class Gamesystem {
         }
         return null; 
     }
+    
     public void leggiFileSpells(String FileSpell) {
         try (BufferedReader br = new BufferedReader(new FileReader(FileSpell))) {
             String riga;
             while ((riga = br.readLine()) != null) {
                 if (riga.trim().isEmpty()) continue; // Salta righe vuote
-                String[] dati = riga.split("\\|");
+                Spell s= SpellFactory.crea(riga.split("\\|"));
+                /**String[] dati = riga.split("\\|");
                 String nome = dati[0];
                 String desc = dati[1];
                 String classe = dati[2];
@@ -458,6 +451,8 @@ public class Gamesystem {
                 s = new SpellBuff(nome, desc, classe, costo, tipo, valore);
             }
             listaSpells.add(s);     
+        }**/
+                listaSpells.add(s);     
             }
         } catch (Exception e) {
             System.err.println("Errore nel caricamento file: " + e.getMessage());

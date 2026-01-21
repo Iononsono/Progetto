@@ -2,3 +2,5 @@ Mario|Mago|100.0|200.0|15.0
 Luigi|Guerriero|150.0|50.0|25.0
 Pinco|Arciere|9.0|9.0|13.0
 
+Marco|Guerriero|13.0|11.0|8.0
+

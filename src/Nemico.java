@@ -10,8 +10,6 @@ protected float hp,atk,mp;
     }
     
  public void initBaseStats() {
-        // Implementa la logica per impostare le statistiche di base in base alla classe
-       
         System.out.println("Inizializzazione statistiche base per "+ this.classe);
         switch (this.classe) {
             case "goblin":

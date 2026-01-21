@@ -28,22 +28,21 @@ public class Combattimento {
         System.out.println("Inizio del combattimento tra " + e.getNome() + " e " + n.getNome());
 
         while (statsEroe.get("hp") > 0 && statsNemico.get("hp") > 0) {
-            // Turno dell'eroe
             TurnoEroe();
             if (statsNemico.get("hp") <= 0) {
                 System.out.println(n.getNome() + " è stato sconfitto!");
                 e.controllaQuest(n.getClasse());
                 break;
             }
-
-            // Turno del nemico
+            System.out.println("----------------------------------------");
             TurnoNemico();
             if (statsEroe.get("hp") <= 0) {
                 System.out.println(e.getNome() + " è stato sconfitto!");
                 break;
             }
+            System.out.println("----------------------------------------");
         }
-
+        System.out.println("----------------------------------------");
         System.out.println("Combattimento terminato.");
     }
    
@@ -72,7 +71,7 @@ public class Combattimento {
                 statsEroe.put("mp", manaMax);
                 float dannoEroe = calcoloDanno(statsEroe.get("atk"), e.getNome());
                 statsNemico.put("hp", statsNemico.get("hp") - dannoEroe);
-                System.out.printf("[Eroe]:%s attacca per %.1f danni.\nHP rimanenti per %s: %.1f\n",e.getNome(), dannoEroe, n.getNome(), statsNemico.get("hp"));                          
+                System.out.printf("[%s] attacca per %.1f danni.\nHP rimanenti per [%s]: %.1f\n",e.getNome(), dannoEroe, n.getNome(), statsNemico.get("hp"));                          
             }
             break;
         case 2:
@@ -87,46 +86,28 @@ public class Combattimento {
     
 }
     public void TurnoNemico() {
-    // Implementa la logica del turno del nemico
-    float dannoNemico = calcoloDanno(statsNemico.get("atk"), n.getNome());
-            statsEroe.put("hp", statsEroe.get("hp") - dannoNemico);
-             System.out.printf("[Nemico]:%s attacca per %.1f danni.\n"+
-            "HP rimanenti per %s: %.1f\n",
-                          n.getNome(), dannoNemico, e.getNome(), statsEroe.get("hp"));
-            System.out.println(n.getNome() + " attacca {" + e.getNome() + "} per " + dannoNemico + " danni. HP rimanenti di {" + e.getNome() + "}: " + statsEroe.get("hp"));
-}
+        float dannoNemico = calcoloDanno(statsNemico.get("atk"), n.getNome());
+        statsEroe.put("hp", statsEroe.get("hp") - dannoNemico);
+        System.out.printf("[%s] attacca per %.1f danni.\nHP rimanenti per [%s]: %.1f\n",n.getNome(), dannoNemico, e.getNome(), statsEroe.get("hp"));
+    }
 
     public void sceltaspell(Eroe e) {
         int i=0;
         System.out.println("Scegli una spell da usare:");
         for(Spell s : e.getSpells()) {
-            
-            if(s.getTipo().equals("DAMAGE")){
-                System.out.printf("%d)- %s (Costo MP: %.1f, Danno: %.1f)\n", i, s.getNome(), s.getCostoMP(), s.getValore());
-                i++;
-            }
-            else{
-                System.out.printf("%d)- %s (Costo MP: %.1f, Buff ATK: %.1f)\n", i, s.getNome(), s.getCostoMP(), s.getValore());
-                i++;
-            }            
+            System.out.println(i + ") " + s.getDescCombat());
+            i++;
             }
         int spellScelta = input.nextInt();   
         input.nextLine(); // Consumare la nuova linea rimasta nel buffer         
         Spell s = e.getSpells().get(spellScelta);
-        if(statsEroe.get("mp") >= s.getCostoMP()) {
+        if (statsEroe.get("mp") >= s.getCostoMP()) {
             statsEroe.put("mp", statsEroe.get("mp") - s.getCostoMP());
-            if(s.getTipo().equals("DAMAGE")) {
-                float dannoSpell = s.getValore();
-                statsNemico.put("hp", statsNemico.get("hp") - dannoSpell);
-                System.out.printf("[%s] usa [%s] e infligge %.1f danni a %s.\n",e.getNome(), s.getNome(), dannoSpell, n.getNome());                                                
-                    } else if(s.getTipo().equals("BUFF")) {
-                        float buffAtk = s.getValore();
-                        statsEroe.put("atk", statsEroe.get("atk") + buffAtk);
-                        System.out.printf("[%s] usa [%s] e aumenta il suo ATK di %.1f.\n",e.getNome(), s.getNome(), buffAtk);                               
-                    }
-                } else {
-                    System.out.println("MP insufficienti per usare " + s.getNome());
-                    TurnoEroe();
-                }
-            }   
+            System.out.printf("[%s] usa %s!\n", e.getNome(), s.getNome());
+            s.applicaEffetto(statsEroe, statsNemico);
+        } else {
+            System.out.println("MP insufficienti per usare " + s.getNome());
+            TurnoEroe();
+        }  
+    }
 }

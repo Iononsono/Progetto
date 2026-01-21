@@ -28,20 +28,30 @@ public class Eroe extends Entita {
 
       
     public void stampaInv() {
-        int i=0;
-        System.out.println("Inventario di " + this.nome + ":");
-        for (Map.Entry<Equip, Boolean> entry : Inv.entrySet()) {
-            Equip equip = entry.getKey();
-            Boolean equipped = entry.getValue();
-            System.out.println(i+")" + equip.getNome() + " [" + equip.getClasse() + "][" + equip.getTipo() + "] " + (equipped ? " (Equipaggiato)" : ""));
-            i++;
+    int i = 0;
+    for (Map.Entry<Equip, Boolean> entry : Inv.entrySet()) {
+        Equip e = entry.getKey();
+        boolean montato = entry.getValue();
+        
+        // %-2d = indice (2 spazi)
+        // %-25s = nome oggetto (25 spazi)
+        // %-12s = tipo tra parentesi quadre (12 spazi)
+        System.out.printf("| %-2d) %-25s [%-10s] %s |\n", 
+                          i, 
+                          e.getNome(), 
+                          e.getTipo(), 
+                          montato ? "[E]" : "   ");
+        i++;
+    }
+}
+    public void stampaSpells() {
+    if (SpellsEroe.isEmpty()) {
+        System.out.println("|   (Nessun incantesimo appreso)            |");
+    } else {
+        for (Spell s : SpellsEroe) {
+            System.out.printf("| • %-39s |\n", s.getDescCombat());
         }
     }
-    public void stampaSpells() {
-        System.out.println("Spells conosciute da " + this.nome + ":");
-        for (Spell s : SpellsEroe) {
-            System.out.printf("- %s (Costo MP: %.1f, Tipo: %s, Valore: %.1f)\n", s.getNome(), s.getCostoMP(), s.getTipo(), s.getValore());
-        }
     }
     public void initBaseStats(BaseStats bs) {
         System.out.println("Inizializzazione statistiche base per "+ this.classe);
@@ -89,8 +99,11 @@ public class Eroe extends Entita {
     public void controllaQuest(Object evento){
         for(Quest q : QuestsEroe) {
         q.aggiorna(evento);
-            
-        }    
+        if(q.isCompletata()){
+            Inv.put(q.getPremio(), false);
+            System.out.println("Hai ricevuto il premio della quest: "+q.getPremio().getNome());
+            }  
+        }  
 
     }
     public void equipItem(int index) {
@@ -125,15 +138,23 @@ public class Eroe extends Entita {
     public List<Spell> getSpells() {
         return SpellsEroe;
     }
+    @Override
     public void mostraSchedaEntita() {
-        super.mostraSchedaEntita();
-        System.out.println("--- STATISTICHE TOTALI (con Equip) ---");
-        System.out.println("HP: " + statsTot.getHp());
-        System.out.println("ATK: " + statsTot.getAtk());
-        System.out.println("MP: " + statsTot.getMp());
-        stampaSpells();
-        stampaInv();
-    }
+    super.mostraSchedaEntita(); 
+    System.out.println("\n[ STATISTICHE TOTALI ]");
+    System.out.println("----------------------------------------");
+    System.out.printf("| %-10s: %6.1f | %-10s: %6.1f |\n", 
+                      "Punti Vita", statsTot.getHp(), 
+                      "Punti Mana", statsTot.getMp());
+    System.out.printf("| %-10s: %6.1f |\n", 
+                      "Attacco", statsTot.getAtk());             
+    System.out.println("----------------------------------------");
+    System.out.println("\n> INCANTESIMI:");
+    stampaSpells();
+    System.out.println("\n> INVENTARIO:");
+    stampaInv();
+    System.out.println("========================================\n");
+}
     public void calcolaStatsFinali() {
     Statistiche calcolo = this.bs;
 

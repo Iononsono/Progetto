@@ -10,9 +10,18 @@ public class ObiettivoKill implements ObiettivoStrategy {
     }
 
     @Override
+    public int getCorrente() { return attuali; }
+    @Override
+    public int getTotale() { return necessari; }
+    @Override
     public boolean isCompletato() { 
         return attuali >= necessari;
     }
+    @Override
+    public String getDescrizione() { 
+        return "Uccidi " + nomeNemicoTarget + " (" + attuali + "/" + necessari + ")";
+    }
+    @Override
     public void aggiorna(Object evento) {
         if (evento instanceof String && ((String) evento).equalsIgnoreCase(nomeNemicoTarget)) {
             if (attuali < necessari){
@@ -20,13 +29,6 @@ public class ObiettivoKill implements ObiettivoStrategy {
             System.out.println("Quest aggiornata:"+getDescrizione());
             }
         }
-    }
-
-    public String getDescrizione() { 
-        return "Uccidi " + nomeNemicoTarget + " (" + attuali + "/" + necessari + ")";
-    }
-    public String getObiettivoDesc() {
-        return "KILL";
     }
     public String getNomeNemicoTarget(){
         return nomeNemicoTarget;

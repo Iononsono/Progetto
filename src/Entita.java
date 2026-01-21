@@ -5,7 +5,7 @@ public abstract class Entita {
     protected String nome;
     Scanner input = new Scanner(System.in);
     protected String classe;
-    protected Eroe er; // Dichiariamo solo la variabile, senza "new" qui
+
     public Map<String, Float> stats = new HashMap<>();
 
     public Entita(String nome, String classe) {
@@ -27,8 +27,10 @@ public abstract class Entita {
     }
 
     public void mostraSchedaEntita() {
-        System.out.println("Nome: " + getNome());
-        System.out.println("Classe: " + getClasse());
+    System.out.println("\n.-------------------------------------------.");
+    System.out.printf("| %-41s |\n", "SCHEDA SOGGETTO: " + getNome().toUpperCase());
+    System.out.println("|-------------------------------------------|");
+    System.out.printf("| CLASSE: %-33s |\n", getClasse());
     }
     
 }
