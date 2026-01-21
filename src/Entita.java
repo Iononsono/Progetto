@@ -3,9 +3,9 @@ import java.util.Map;
 import java.util.Scanner;
 public abstract class Entita {
     protected String nome;
-    Scanner input = new Scanner(System.in);
+    protected int livello;
     protected String classe;
-
+    protected Scanner input = new Scanner(System.in);
     public Map<String, Float> stats = new HashMap<>();
 
     public Entita(String nome, String classe) {
@@ -24,6 +24,9 @@ public abstract class Entita {
     }
     public Map<String, Float> getStats() {
         return stats;
+    }
+    public int getLivello(){
+        return livello;
     }
 
     public void mostraSchedaEntita() {

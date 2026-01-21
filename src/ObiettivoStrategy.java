@@ -4,4 +4,6 @@ public interface ObiettivoStrategy {
     String getDescrizione(); // Descrizione (es: "Uccidi Orchi")
     int getCorrente();         // Progresso attuale
     int getTotale();
+    String getTipo();
+    Object getNomeTarget();
 }

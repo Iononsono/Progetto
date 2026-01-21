@@ -346,9 +346,9 @@ public class Gamesystem {
             String dati = String.format("%s|%s|%s|%s|%d|%s\n",
                 q.getTitolo(),
                 q.getDescrizione(),
-                q.getObbiettivoDesc(),
-                q.getTarget(),
-                q.getQuantita(),
+                q.getObiettivo().getTipo(),
+                q.getObiettivo().getNomeTarget(),
+                q.getObiettivo().getTotale(),
                 q.getPremio().getNome()
             );
             
@@ -408,8 +408,11 @@ public class Gamesystem {
     public void accettaQuest(){
     System.out.println("Quale Eroe vuole accettare la Quest?");    
     String nomeEroe=input.nextLine();
-    er=trovaEroe(nomeEroe);   
-    er.accettaQuest(listaQuest); 
+    Entita e= trovaEntita(nomeEroe);
+    Eroe ero=(Eroe) e;
+    if (ero != null){
+        ero.accettaQuest(listaQuest); 
+        }
     }
     public Equip trovaEquip(String dati){
         for(Equip q: listaEquip){
@@ -437,21 +440,7 @@ public class Gamesystem {
             while ((riga = br.readLine()) != null) {
                 if (riga.trim().isEmpty()) continue; // Salta righe vuote
                 Spell s= SpellFactory.crea(riga.split("\\|"));
-                /**String[] dati = riga.split("\\|");
-                String nome = dati[0];
-                String desc = dati[1];
-                String classe = dati[2];
-                float costo = Float.parseFloat(dati[3]);
-                String tipo = dati[4]; // DAMAGE o BUFF
-                float valore = Float.parseFloat(dati[5]);
-                Spell s;
-            if (tipo.equalsIgnoreCase("DAMAGE")) {
-                s = new SpellDmg(nome, desc, classe, costo, tipo, valore);
-            } else {
-                s = new SpellBuff(nome, desc, classe, costo, tipo, valore);
-            }
-            listaSpells.add(s);     
-        }**/
+
                 listaSpells.add(s);     
             }
         } catch (Exception e) {

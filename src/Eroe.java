@@ -10,23 +10,50 @@ public class Eroe extends Entita {
     private List<Quest> QuestsEroe = new ArrayList<>();
     public Map<Equip,Boolean> Inv = new HashMap<>();
     private BaseStats bs;
-
+    private int expN=livello+1;
+    private int expAttuale=0;
 
     public Eroe(String nome, String classe) {
-        // Chiama il costruttore di Entita per inizializzare nome e classe
+        // Costruttore console
         super(nome, classe);
             if (!classe.equals("Guerriero") && !classe.equals("Mago") && !classe.equals("Arciere")) {
                 System.out.println("Classe non valida. Impostazione classe predefinita a Guerriero.");
               this.classe="Guerriero";
             }
-            
-             System.out.println("Eroe creato correttamente: " + nome + " [" + this.classe + "]");
+            this.livello=livello;
+            expAttuale=0;
+            this.livello=5;
+            System.out.println("Eroe creato correttamente: " + nome + " [" + this.classe + "]");
             this.bs = new BaseStats(this.classe);
             initBaseStats(bs);
             addSpells(this.SpellsEroe);
         }
-
-      
+    public Eroe(String nome, String classe, float hp, float atk, float mp) {
+        //Costruttore file
+        super(nome, classe);
+        expAttuale=0;
+        this.livello=5;
+        stats.put("hp", hp);
+        stats.put("atk", atk);
+        stats.put("mp", mp);
+        this.bs = new BaseStats(classe);
+        this.bs.sommaStats(hp, atk, mp);
+        this.statsTot = this.bs;
+    }
+    public void stampaQuest(){
+        if (QuestsEroe.isEmpty()) {
+        System.out.println(" > Nessuna missione in corso.");
+    } else {
+        for (Quest q : QuestsEroe) {
+            String stato = q.getObiettivo().isCompletato() ? "[COMPLETATA]" : q.getProgressBar();
+            System.out.printf(" - %-15s %s (%d/%d)\n", 
+                q.getTitolo(), 
+                stato, 
+                q.getObiettivo().getCorrente(), 
+                q.getObiettivo().getTotale());
+        }
+    }
+    }     
     public void stampaInv() {
     int i = 0;
     for (Map.Entry<Equip, Boolean> entry : Inv.entrySet()) {
@@ -42,8 +69,17 @@ public class Eroe extends Entita {
                           e.getTipo(), 
                           montato ? "[E]" : "   ");
         i++;
+        } 
     }
-}
+    public void assegnaExp(int expG){
+        if(expAttuale+expG>=expN){
+            levelUP(expG);
+        }
+        else{
+            expAttuale+=expG;
+            System.out.println("Hai guadagnato "+expG+" punti esperienza. Esperienza attuale: "+expAttuale+"/"+expN);
+        }
+    }
     public void stampaSpells() {
     if (SpellsEroe.isEmpty()) {
         System.out.println("|   (Nessun incantesimo appreso)            |");
@@ -63,15 +99,7 @@ public class Eroe extends Entita {
     }
     
 
-    public Eroe(String nome, String classe, float hp, float atk, float mp) {
-        super(nome, classe);
-        stats.put("hp", hp);
-        stats.put("atk", atk);
-        stats.put("mp", mp);
-        this.bs = new BaseStats(classe);
-        this.bs.sommaStats(hp, atk, mp);
-        this.statsTot = this.bs;
-    }
+
     
     public void addSpells(List<Spell> listaSpells) {
         for(Spell s : listaSpells) {
@@ -153,16 +181,16 @@ public class Eroe extends Entita {
     stampaSpells();
     System.out.println("\n> INVENTARIO:");
     stampaInv();
+    System.out.println("\n> QUEST:");
+    stampaQuest();
     System.out.println("========================================\n");
+    //aggiungi leggi quest
 }
     public void calcolaStatsFinali() {
     Statistiche calcolo = this.bs;
-
-    // 2. Scorriamo l'inventario e "avvolgiamo" l'eroe con gli oggetti attivi
     for (Map.Entry<Equip, Boolean> entry : Inv.entrySet()) {
         if (entry.getValue()) { // Se è equipaggiato (true)
             Equip oggetto = entry.getKey();
-            // Creiamo il decoratore usando il costruttore a 7 parametri
             calcolo = new Equip(calcolo, oggetto.getNome(), oggetto.getTipo(), 
                                 oggetto.getClasse(), oggetto.getAtkBonus(), 
                                 oggetto.getHpBonus(), oggetto.getMpBonus());
@@ -170,4 +198,14 @@ public class Eroe extends Entita {
     }
     this.statsTot = calcolo;
 }
+    
+    public void levelUP(int expG){
+        expAttuale= (expAttuale+expG)-expN;
+        livello++;
+        System.out.println("Complimenti hai livellato! Sei ora al livello: "+livello);
+        List<Float> stats = bs.assegnaPunti(3);
+        bs.sommaStats(statsTot.getHp()+stats.get(0), statsTot.getAtk()+stats.get(1), statsTot.getMp()+stats.get(2));
+        calcolaStatsFinali();
+        bs.mostraStats();
+    }
 }

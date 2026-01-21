@@ -2,4 +2,7 @@ Sterminio Lupi|Uccidi i lupi che terrorizzano il villaggio|KILL|goblin|5|Armatur
 Vendetta dell'Arciere|Sconfiggi gli arcieri scheletro nelle rovine|KILL|goblin|3|Scudo Pesante
 Cacciatore di Boss|Sconfiggi il Re Orco nella caverna profonda|KILL|goblin|1|Anello del Potere
 Quest di prova|Desc|KILL|goblin|5|Armatura a Piastre
-
+La Prova del Novizio|Raggiungi il livello 5 per dimostrare il tuo valore|LEVEL|5|0|Spada del Destino
+Ascensione del Guerriero|Dimostra la tua forza raggiungendo il livello 10|LEVEL|10|0|Armatura a Piastre
+Potere Arcano|Sblocca il tuo potenziale magico arrivando al livello 15|LEVEL|15|0|Grimorio Antico
+Eroe Leggendario|Raggiungi il livello 20 per diventare una leggenda|LEVEL|20|0|Anello del Potere

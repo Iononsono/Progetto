@@ -10,6 +10,7 @@ public class Combattimento {
     private Map<String, Float> statsNemico;
     private Scanner input = new Scanner(System.in);
     private float manaRecuperato, manaMax;
+    private int expG=100;//n.getExpRilasciata();
 
     public Combattimento(Eroe e, Nemico n) {
         this.e = e;
@@ -31,7 +32,9 @@ public class Combattimento {
             TurnoEroe();
             if (statsNemico.get("hp") <= 0) {
                 System.out.println(n.getNome() + " è stato sconfitto!");
+                e.assegnaExp(expG);
                 e.controllaQuest(n.getClasse());
+                e.controllaQuest(e.getLivello());
                 break;
             }
             System.out.println("----------------------------------------");

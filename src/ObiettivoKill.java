@@ -36,6 +36,13 @@ public class ObiettivoKill implements ObiettivoStrategy {
     public Integer getNecessari(){
         return necessari;
     }
+    public String getTipo(){
+        return "KILL";
+    }
+    @Override
+    public Object getNomeTarget(){
+        return nomeNemicoTarget;
+    }
 }
 
 
