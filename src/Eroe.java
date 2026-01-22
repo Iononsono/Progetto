@@ -10,7 +10,7 @@ public class Eroe extends Entita {
     private List<Quest> QuestsEroe = new ArrayList<>();
     public Map<Equip,Boolean> Inv = new HashMap<>();
     private BaseStats bs;
-    private int expN=livello+1;
+    private int expN;
     private int expAttuale=0;
 
     public Eroe(String nome, String classe) {
@@ -23,6 +23,7 @@ public class Eroe extends Entita {
             this.livello=livello;
             expAttuale=0;
             this.livello=5;
+            this.expN=livello*10;
             System.out.println("Eroe creato correttamente: " + nome + " [" + this.classe + "]");
             this.bs = new BaseStats(this.classe);
             initBaseStats(bs);
@@ -55,20 +56,20 @@ public class Eroe extends Entita {
     }
     }     
     public void stampaInv() {
-    int i = 0;
-    for (Map.Entry<Equip, Boolean> entry : Inv.entrySet()) {
-        Equip e = entry.getKey();
-        boolean montato = entry.getValue();
+        int i = 0;
+        for (Map.Entry<Equip, Boolean> entry : Inv.entrySet()) {
+            Equip e = entry.getKey();
+            boolean montato = entry.getValue();
         
-        // %-2d = indice (2 spazi)
-        // %-25s = nome oggetto (25 spazi)
-        // %-12s = tipo tra parentesi quadre (12 spazi)
-        System.out.printf("| %-2d) %-25s [%-10s] %s |\n", 
-                          i, 
-                          e.getNome(), 
-                          e.getTipo(), 
-                          montato ? "[E]" : "   ");
-        i++;
+            // %-2d = indice (2 spazi)
+            // %-25s = nome oggetto (25 spazi)
+            // %-12s = tipo tra parentesi quadre (12 spazi)
+            System.out.printf("| %-2d) %-25s [%-10s] %s |\n", 
+                            i, 
+                            e.getNome(), 
+                            e.getTipo(), 
+                            montato ? "[E]" : "   ");
+            i++;
         } 
     }
     public void assegnaExp(int expG){
@@ -81,13 +82,13 @@ public class Eroe extends Entita {
         }
     }
     public void stampaSpells() {
-    if (SpellsEroe.isEmpty()) {
-        System.out.println("|   (Nessun incantesimo appreso)            |");
-    } else {
-        for (Spell s : SpellsEroe) {
-            System.out.printf("| • %-39s |\n", s.getDescCombat());
+        if (SpellsEroe.isEmpty()) {
+            System.out.println("|   (Nessun incantesimo appreso)            |");
+        } else {
+            for (Spell s : SpellsEroe) {
+                System.out.printf("| • %-39s |\n", s.getDescCombat());
+            }
         }
-    }
     }
     public void initBaseStats(BaseStats bs) {
         System.out.println("Inizializzazione statistiche base per "+ this.classe);
@@ -96,11 +97,7 @@ public class Eroe extends Entita {
         stats.put("hp", statsTot.getHp());
         stats.put("atk", statsTot.getAtk());
         stats.put("mp", statsTot.getMp());
-    }
-    
-
-
-    
+    }   
     public void addSpells(List<Spell> listaSpells) {
         for(Spell s : listaSpells) {
             if(s.getClasse().equals(this.classe)) {
@@ -112,17 +109,24 @@ public class Eroe extends Entita {
     }
     public void accettaQuest(List<Quest> listaQuests){
         int i=0;
-        Quest qe= null;
-       for(Quest q : listaQuests) {
-        System.out.print(i+")");
-        q.stampaQuest();
-        i++;
-        }
+        for(Quest q : listaQuests) {
+            System.out.print(i+")");
+            q.stampaQuest();
+            i++;
+            }
+        int scelta=0;
         System.out.println("Seleziona Quest");
-        int index=input.nextInt();
+        while(true){
+            int index=input.nextInt();
+            if(index==-1) break;
+            if(index>=0&&index<listaQuests.size()){
+                QuestsEroe.add(listaQuests.get(index));
+                System.out.println("Quest "+listaQuests.get(index).getTitolo()+" accettata buona fortuna.\n Scegli un altra quest o esci[-1]");
+            }
+            
+        }
         input.nextLine();
-        QuestsEroe.add(listaQuests.get(index));
-        System.out.println("Quest "+listaQuests.get(index).getTitolo()+" accettata buona fortuna."); 
+         
     }
     public void controllaQuest(Object evento){
         for(Quest q : QuestsEroe) {
@@ -135,13 +139,13 @@ public class Eroe extends Entita {
 
     }
     public void equipItem(int index) {
-    if (index >= 0 && index < Inv.size()) {
-        List<Equip> keys = new ArrayList<>(Inv.keySet());
-        Equip scelto = keys.get(index);
-        if(!scelto.getClasse().equals(this.classe) && !scelto.getClasse().equals("Universale")){
-            System.out.println("Non puoi equipaggiare " + scelto.getNome() + " perché non è adatto alla classe " + this.classe);
-            return;
-        }
+        if(index >= 0 && index < Inv.size()) {
+            List<Equip> keys = new ArrayList<>(Inv.keySet());
+            Equip scelto = keys.get(index);
+            if(!scelto.getClasse().equals(this.classe) && !scelto.getClasse().equals("Universale")){
+                System.out.println("Non puoi equipaggiare " + scelto.getNome() + " perché non è adatto alla classe " + this.classe);
+                return;
+            }
 
         for(Map.Entry<Equip, Boolean> entry : Inv.entrySet()) {
             Equip equip = entry.getKey();
@@ -155,14 +159,11 @@ public class Eroe extends Entita {
         }
         Inv.put(scelto, true);
         System.out.println("Hai equipaggiato: " + scelto.getNome());
-        calcolaStatsFinali();
-        
-        
+        calcolaStatsFinali(); 
     } else {
         System.out.println("Ritorna al menu precedente");
+        }
     }
-}
-
     public List<Spell> getSpells() {
         return SpellsEroe;
     }
@@ -201,8 +202,13 @@ public class Eroe extends Entita {
     
     public void levelUP(int expG){
         expAttuale= (expAttuale+expG)-expN;
+        int vlv=livello;
         livello++;
-        System.out.println("Complimenti hai livellato! Sei ora al livello: "+livello);
+        System.out.println("========================================");
+        System.out.println("|Complimenti sei salito di livello!"+vlv+"->"+livello+"|");
+        System.out.println("========================================");
+        controllaQuest(getLivello());
+        this.expN = this.livello+1;
         List<Float> stats = bs.assegnaPunti(3);
         bs.sommaStats(statsTot.getHp()+stats.get(0), statsTot.getAtk()+stats.get(1), statsTot.getMp()+stats.get(2));
         calcolaStatsFinali();

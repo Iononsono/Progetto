@@ -13,7 +13,8 @@ public class Gamesystem {
     private Nemico n;
     private Spell s;
     private Equip eq;
-    private Quest q;    
+    private Quest q;
+    Random random = new Random();  
     private List<Eroe> listaEroi = new ArrayList<>();
     private List<Nemico> listaNemici = new ArrayList<>();
     private List<Spell> listaSpells = new ArrayList<>();
@@ -96,14 +97,18 @@ public class Gamesystem {
                     String nomeEroe = input.nextLine();
                     Entita e= trovaEntita(nomeEroe);
                     Eroe ero=(Eroe) e;
-                    ero.stampaInv();
-                    int equipScelto=0;
-                    while(equipScelto!=-1){
-                    System.out.println("Scegli l'equipaggiamento da equipaggiare:");
-                    equipScelto = input.nextInt();
-                    input.nextLine();
-                    ero.equipItem(equipScelto);
-                    }
+                    if (ero.Inv.isEmpty()) {
+                        System.out.println("L'inventario è vuoto! Non hai nulla da equipaggiare.");
+                    }else{
+                        ero.stampaInv();
+                        int equipScelto=0;
+                        while(equipScelto!=-1){
+                        System.out.println("Scegli l'equipaggiamento da equipaggiare:");
+                        equipScelto = input.nextInt();
+                        input.nextLine();
+                        ero.equipItem(equipScelto);
+                        }
+                        }
                     break;
                 case 3:
                     avviaCombattimento();
@@ -147,7 +152,7 @@ public class Gamesystem {
 
             
     }
-    public void letturadatiFile() {
+    public void letturadatiFile() {//Si potrebbe creare un classe dedicata per spostare le responsabilità
         String FileEroe= "src/eroi.txt";
         String FileNemico= "src/nemici.txt";
         String FileSpell="src/spells.txt";
@@ -159,12 +164,9 @@ public class Gamesystem {
 
         try (BufferedReader br = new BufferedReader(new FileReader(FileEroe))) {
             String riga;
-            // Legge riga per riga finché il file non è vuoto
             while ((riga = br.readLine()) != null) {
-                if (riga.trim().isEmpty()) continue; // Salta righe vuote
-
+                if (riga.trim().isEmpty()) continue;
                 String[] dati = riga.split("\\|");
-               
                 er= new Eroe(dati[0], dati[1], Float.parseFloat(dati[2]), Float.parseFloat(dati[3]), Float.parseFloat(dati[4]));
                 listaEroi.add(er);
                 er.addSpells(listaSpells);
@@ -276,8 +278,6 @@ public class Gamesystem {
         System.out.println("Premio casuale o specifico? [-1/Numero equipaggiamento]");
         stampaEquip();
         int premioScelto = input.nextInt();
-        Random random = new Random();
-    
         if(premioScelto==-1){
         premioScelto=random.nextInt(listaEquip.size());
         }
@@ -392,8 +392,9 @@ public class Gamesystem {
         Entita e= trovaEntita(nomeEroe);
         Eroe ero=(Eroe) e;
         if (ero != null) {
-            System.out.println("Con quale nemico vuoi far combattere " + e.getNome() + "?");;
-            Nemico n= listaNemici.get(0); // Per semplicità, selezioniamo il primo nemico della lista
+            System.out.println("Verrà selezionato un nemico randomico per "+e.getNome());
+            int nRandom=random.nextInt(listaNemici.size());
+            n= listaNemici.get(nRandom); // Se dovesse servire si implementa la classe del nemico
             if (n != null) {
                 c=new Combattimento(ero, n);
                 c.avviaCombattimento();
@@ -406,14 +407,14 @@ public class Gamesystem {
         
     }
     public void accettaQuest(){
-    System.out.println("Quale Eroe vuole accettare la Quest?");    
-    String nomeEroe=input.nextLine();
-    Entita e= trovaEntita(nomeEroe);
-    Eroe ero=(Eroe) e;
-    if (ero != null){
-        ero.accettaQuest(listaQuest); 
+        System.out.println("Quale Eroe vuole accettare la Quest?");    
+        String nomeEroe=input.nextLine();
+        Entita e= trovaEntita(nomeEroe);
+        Eroe ero=(Eroe) e;
+        if (ero != null){
+            ero.accettaQuest(listaQuest); 
+            }
         }
-    }
     public Equip trovaEquip(String dati){
         for(Equip q: listaEquip){
             if(q.getNome().equals(dati)) return q;

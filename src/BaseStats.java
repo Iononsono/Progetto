@@ -10,7 +10,7 @@ public class BaseStats implements Statistiche {
     float hpA=6, atkA=6, mpA=10;
     private float bHp=0, bAtk=0, bMp=0;
     private List<Float> stats=new ArrayList<>();
-    private int pb;
+    private int pb=15;
 
     public BaseStats(String classeN) {
         this.classe=classeN;
@@ -52,7 +52,7 @@ public class BaseStats implements Statistiche {
     @Override public float getMp() { return mp;}
 
     public void mostraStats() {
-        System.out.println("Statistiche senza Equip per " + classe + ": HP " + getHp() + ", ATK " + getAtk() + ", MP " + getMp());
+        System.out.println("Statistiche senza Equip: HP"  + getHp() + ", ATK " + getAtk() + ", MP " + getMp());
     }
 
     public void sommaStats(float hp, float atk, float mp) {
@@ -62,22 +62,21 @@ public class BaseStats implements Statistiche {
     }
     public List<Float> assegnaPunti(int puntiDisponibili) {
         System.out.println("Inserisci " + puntiDisponibili + " punti stats in totale tra[HP/ATK/MP]:");
-        float hp=input.nextFloat();
-        float atk=input.nextFloat();
-        float mp=input.nextFloat();
-
-        if (checkStats(hp, atk, mp) == puntiDisponibili) {
+        boolean Pcorretti = false;
+        while(!Pcorretti){
+            float hp=input.nextFloat();
+            float atk=input.nextFloat();
+            float mp=input.nextFloat();
+            if (checkStats(hp, atk, mp) == puntiDisponibili) {
             stats.set(0, hp);
             stats.set(1, atk);
             stats.set(2, mp);
-            return stats;
-
-        } else {
-            System.out.println("Errore! Devi distribuire esattamente " + puntiDisponibili + " punti.");
-            setBaseStats(classe);
-            
+            Pcorretti=true;
+            }else {
+                System.out.println("Errore! Devi distribuire esattamente " + puntiDisponibili + " punti.");    
+            }
         }
-        return null;
+        return stats;
     }
 
 

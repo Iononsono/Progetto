@@ -31,10 +31,9 @@ public class Combattimento {
         while (statsEroe.get("hp") > 0 && statsNemico.get("hp") > 0) {
             TurnoEroe();
             if (statsNemico.get("hp") <= 0) {
-                System.out.println(n.getNome() + " è stato sconfitto!");
+                System.out.println("["+n.getNome()+"]" + " è stato sconfitto!");
                 e.assegnaExp(expG);
                 e.controllaQuest(n.getClasse());
-                e.controllaQuest(e.getLivello());
                 break;
             }
             System.out.println("----------------------------------------");
@@ -62,7 +61,7 @@ public class Combattimento {
 
     public void TurnoEroe() {
     // Implementa la logica del turno dell'eroe
-    System.out.println("E' il turno di " + e.getNome() + ". Scegli un'azione:1) Attacca 2) Usa Spell");
+    System.out.println("E' il turno di " + e.getNome() + ". Scegli un'azione:\n|1->Attacca|2->Usa Spell|");
     int sceltaEroe;
     float temp=statsEroe.get("mp");
     sceltaEroe=input.nextInt();
@@ -101,8 +100,10 @@ public class Combattimento {
             System.out.println(i + ") " + s.getDescCombat());
             i++;
             }
+        System.out.println(i+") Torna al menù precedente");
         int spellScelta = input.nextInt();   
-        input.nextLine(); // Consumare la nuova linea rimasta nel buffer         
+        input.nextLine(); // Consumare la nuova linea rimasta nel buffer
+        if(spellScelta==i) return;         
         Spell s = e.getSpells().get(spellScelta);
         if (statsEroe.get("mp") >= s.getCostoMP()) {
             statsEroe.put("mp", statsEroe.get("mp") - s.getCostoMP());
