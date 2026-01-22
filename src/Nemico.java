@@ -6,7 +6,6 @@ protected float hp,atk,mp;
         
         super(nome, classe);
         System.out.println("Nemico creato correttamente: " + nome + " [" + this.classe + "]");
-        initBaseStats();
     }
     
  public void initBaseStats() {

@@ -49,15 +49,13 @@ public class Combattimento {
     }
    
     public float calcoloDanno(float atk, String nome) {    
-    Random random = new Random();
-    // UC5: Il sistema effettua il tiro di dado 
-    float r = random.nextInt(1,7); 
-    
-    System.out.println("[" + nome + "] Lancio del dado: " + r); 
-    
-    float danno =atk+ atk * r/100;
-    return (float) (Math.round(danno * 10.0) / 10.0); 
-}
+        Random random = new Random();
+        // UC5: Il sistema effettua il tiro di dado 
+        float r = random.nextInt(1,7); 
+        System.out.println("[" + nome + "] Lancio del dado: " + r); 
+        float danno =atk+ atk * r/100;
+        return (float) (Math.round(danno * 10.0) / 10.0); 
+    }
 
     public void TurnoEroe() {
     // Implementa la logica del turno dell'eroe

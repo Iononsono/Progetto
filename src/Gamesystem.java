@@ -14,6 +14,9 @@ public class Gamesystem {
     private Spell s;
     private Equip eq;
     private Quest q;
+    private Integer nNemico;
+    private int scelta;
+    private int winstreak = 0;
     Random random = new Random();  
     private List<Eroe> listaEroi = new ArrayList<>();
     private List<Nemico> listaNemici = new ArrayList<>();
@@ -39,7 +42,6 @@ public class Gamesystem {
         
         String nome;
         String classe;
-        int scelta;
         System.out.println("Sei admin o player?(0 o 1)"); 
         int Attore = input.nextInt();
         if(Attore == 0){
@@ -56,7 +58,8 @@ public class Gamesystem {
                 nome = input.nextLine();
                 System.out.println("Specifica se il nemico è un boss o un goblin:");
                 classe= input.nextLine();
-                Nemico n=new Nemico(nome, classe);
+                n=new Nemico(nome, classe);
+                n.initBaseStats();
                 listaNemici.add(n);
                 salvaSuFile(n);
                 System.out.println("Nemico creato: " + n.getNome() + " Classe: " + n.getClasse());
@@ -103,11 +106,11 @@ public class Gamesystem {
                         ero.stampaInv();
                         int equipScelto=0;
                         while(equipScelto!=-1){
-                        System.out.println("Scegli l'equipaggiamento da equipaggiare:");
-                        equipScelto = input.nextInt();
-                        input.nextLine();
-                        ero.equipItem(equipScelto);
-                        }
+                            System.out.println("Scegli l'equipaggiamento da equipaggiare:");
+                            equipScelto = input.nextInt();
+                            input.nextLine();
+                            ero.equipItem(equipScelto);
+                            }
                         }
                     break;
                 case 3:
@@ -392,9 +395,8 @@ public class Gamesystem {
         Entita e= trovaEntita(nomeEroe);
         Eroe ero=(Eroe) e;
         if (ero != null) {
-            System.out.println("Verrà selezionato un nemico randomico per "+e.getNome());
-            int nRandom=random.nextInt(listaNemici.size());
-            n= listaNemici.get(nRandom); // Se dovesse servire si implementa la classe del nemico
+            System.out.println("Verrà selezionato un nemico per "+e.getNome());
+            n=selezioneNemico();
             if (n != null) {
                 c=new Combattimento(ero, n);
                 c.avviaCombattimento();
@@ -493,4 +495,21 @@ public class Gamesystem {
 
     } while (scelta != 0);
 }
+    public Nemico selezioneNemico(){
+        //per comodità si scelgono nemici casuali, si può aggiustare la logica con la ricerca per classe/nome del nemico
+        System.out.printf("La tua winstreak è: [%d]\n",winstreak);
+        if(winstreak==3){
+            for (Nemico n : listaNemici) {
+            if (n.getClasse().equalsIgnoreCase("boss")) {
+                System.err.println("Il tuo prossimo nemico sarà un boss");
+                winstreak=0;
+                return n;
+                }
+            }   
+        }
+        System.err.println("Il tuo prossimo nemico sarà casuale");
+        winstreak++;
+        n = listaNemici.get(random.nextInt(listaNemici.size()));
+        return n;
+    }
 }
