@@ -6,10 +6,17 @@ public class SpellDmg extends Spell {
         super(nome, descrizione, classe, costoMP, tipo, valore);
     }
     @Override
-    public void applicaEffetto(Map<String, Float> statsPg, Map<String, Float> statsNemico) {
-        statsNemico.put("hp", statsNemico.get("hp") - valore);
-        System.out.println(nome + " infligge " + valore + " danni.");
+    public boolean applicaEffetto(Map<String, Float> statsPg, Map<String, Float> statsNemico) {
+        if (statsPg.get("mp") >= getCostoMP()) {//check del mana
+            statsPg.put("mp", statsPg.get("mp") - getCostoMP());
+            System.out.printf("[%s] usa %s!\n", nome, getNome());
+            statsNemico.put("hp", statsNemico.get("hp") - getValore());
+            System.out.println(getNome() + " infligge " + getValore() + " danni.");
+            return true;
+        }
+        return false;
     }
+    
     @Override
     public String getDescCombat(){
         return String.format("%s (Costo MP: %.1f, Danno: %.1f)", 

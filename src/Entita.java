@@ -33,7 +33,7 @@ public abstract class Entita {
     System.out.println("\n.-------------------------------------------.");
     System.out.printf("| %-41s |\n", "SCHEDA SOGGETTO: " + getNome().toUpperCase());
     System.out.println("|-------------------------------------------|");
-    System.out.printf("| CLASSE: %-33s LV: |\n", getClasse(),getLivello());
+    System.out.printf("| CLASSE: %-27s LV: %d |\n", getClasse(), getLivello());
     }
     
 }

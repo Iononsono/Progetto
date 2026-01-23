@@ -14,16 +14,13 @@ public class Combattimento {
 
     public Combattimento(Eroe e, Nemico n) {
         this.e = e;
-        this.manaMax = e.statsTot.getMp(); //mana max combattimento
         this.n = n;
-        float hpDecorati = e.statsTot.getHp();
-        float atkDecorati = e.statsTot.getAtk();
-        float mpDecorati = e.statsTot.getMp();
         this.statsEroe = new HashMap<>();
         this.statsNemico = new HashMap<>(n.getStats());
-        this.statsEroe.put("hp", hpDecorati);
-        this.statsEroe.put("atk", atkDecorati);
-        this.statsEroe.put("mp", mpDecorati);
+        this.statsEroe.put("hp", e.statsTot.getHp());
+        this.statsEroe.put("atk", e.statsTot.getAtk());
+        this.statsEroe.put("mp", e.statsTot.getMp());
+        this.manaMax = statsEroe.get("mp"); //mana max combattimento
     }
     public void avviaCombattimento() {
         System.out.println("Inizio del combattimento tra " + e.getNome() + " e " + n.getNome());
@@ -76,6 +73,12 @@ public class Combattimento {
             break;
         case 2:
             System.out.println(e.getNome() + " sceglie di usare una spell.");
+            int i=0;
+            for(Spell s : e.getSpells()) {
+                System.out.println(i + ") " + s.getDescCombat());
+                i++;
+            }
+            System.out.println(e.getSpells().size()+") Torna al menù precedente");
             sceltaspell(this.e);
             break;
         default:
@@ -92,24 +95,18 @@ public class Combattimento {
     }
 
     public void sceltaspell(Eroe e) {
-        int i=0;
         System.out.println("Scegli una spell da usare:");
-        for(Spell s : e.getSpells()) {
-            System.out.println(i + ") " + s.getDescCombat());
-            i++;
-            }
-        System.out.println(i+") Torna al menù precedente");
         int spellScelta = input.nextInt();   
         input.nextLine(); // Consumare la nuova linea rimasta nel buffer
-        if(spellScelta==i) return;         
-        Spell s = e.getSpells().get(spellScelta);
-        if (statsEroe.get("mp") >= s.getCostoMP()) {
-            statsEroe.put("mp", statsEroe.get("mp") - s.getCostoMP());
-            System.out.printf("[%s] usa %s!\n", e.getNome(), s.getNome());
-            s.applicaEffetto(statsEroe, statsNemico);
-        } else {
-            System.out.println("MP insufficienti per usare " + s.getNome());
+        if(spellScelta==e.getSpells().size()){
             TurnoEroe();
-        }  
+            return;
+        }        
+        Spell s = e.getSpells().get(spellScelta);
+        if(!s.applicaEffetto(statsEroe, statsNemico)){
+            System.out.println("MP insufficienti per usare " + s.getNome());
+            sceltaspell(e);
+        }
+        
     }
 }

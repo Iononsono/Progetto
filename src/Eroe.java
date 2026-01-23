@@ -86,7 +86,7 @@ public class Eroe extends Entita {
             System.out.println("|   (Nessun incantesimo appreso)            |");
         } else {
             for (Spell s : SpellsEroe) {
-                System.out.printf("| • %-39s |\n", s.getDescCombat());
+                System.out.printf("|  %-39s |\n", s.getDescCombat());
             }
         }
     }
@@ -131,8 +131,9 @@ public class Eroe extends Entita {
     public void controllaQuest(Object evento){
         for(Quest q : QuestsEroe) {
         q.aggiorna(evento);
-        if(q.isCompletata()){
+        if(q.isCompletata()&& !q.isPremioRiscattato()){
             Inv.put(q.getPremio(), false);
+            q.setPremioRiscattato(true);
             System.out.println("Hai ricevuto il premio della quest: "+q.getPremio().getNome());
             }  
         }  
@@ -198,7 +199,7 @@ public class Eroe extends Entita {
         }
     }
     this.statsTot = calcolo;
-}
+    }
     
     public void levelUP(int expG){
         expAttuale= (expAttuale+expG)-expN;
@@ -210,7 +211,7 @@ public class Eroe extends Entita {
         controllaQuest(getLivello());
         this.expN = this.livello+1;
         List<Float> stats = bs.assegnaPunti(3);
-        bs.sommaStats(statsTot.getHp()+stats.get(0), statsTot.getAtk()+stats.get(1), statsTot.getMp()+stats.get(2));
+        bs.sommaStats(bs.getHp() + stats.get(0), bs.getAtk() + stats.get(1), bs.getMp() + stats.get(2));
         calcolaStatsFinali();
         bs.mostraStats();
     }

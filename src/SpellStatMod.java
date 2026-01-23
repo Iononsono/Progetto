@@ -9,19 +9,24 @@ public class SpellStatMod extends Spell {
     }
 
     @Override
-    public void applicaEffetto(Map<String, Float> statsPg, Map<String, Float> statsNemico) {
-        if (tipo.equalsIgnoreCase("BUFF")) {
-            statsPg.put(statTarget, statsPg.get(statTarget) + valore);
-            System.out.println("\n[EFFETTO BUFF]");
-            System.out.println(nome + " aumenta " + statTarget.toUpperCase() + " di " + valore + "!");
-        } 
-        
+    public boolean applicaEffetto(Map<String, Float> statsPg, Map<String, Float> statsNemico) {
+        if (statsPg.get("mp") >= getCostoMP()) {//check del mana
+            statsPg.put("mp", statsPg.get("mp") - getCostoMP());
+            System.out.printf("[%s] usa %s!\n", nome, getNome());
+            if (tipo.equalsIgnoreCase("BUFF")) {
+                statsPg.put(statTarget, statsPg.get(statTarget) + valore);
+                System.out.println("\n[EFFETTO BUFF]");
+                System.out.println(nome + " aumenta " + statTarget.toUpperCase() + " di " + valore + "!");
+            } 
         // Logica per il DEBUFF: agisce sempre sul nemico (bersaglio)
-        else if (tipo.equalsIgnoreCase("DEBUFF")) {
-            statsNemico.put(statTarget, statsNemico.get(statTarget) + valore);
-            System.out.println("\n[EFFETTO DEBUFF]:");
-            System.out.println(nome + " riduce " + statTarget.toUpperCase() + " del bersaglio!");
+            else if (tipo.equalsIgnoreCase("DEBUFF")) {
+                statsNemico.put(statTarget, statsNemico.get(statTarget) + valore);
+                System.out.println("\n[EFFETTO DEBUFF]:");
+                System.out.println(nome + " riduce " + statTarget.toUpperCase() + " del bersaglio!");
+            }
+            return true;
         }
+        return false;
     }
     public String getStatTarget() {
         return statTarget;

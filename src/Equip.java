@@ -4,16 +4,6 @@ public class Equip extends EquipDecorator {
     private String classe;
     private int atkB, hpB, mpB;
 
-    public Equip(String nome, String tipo,String classe, int atkB, int hpB, int mpB) {
-        super(null);
-        this.nome = nome;
-        this.classe = classe;
-        this.tipo = tipo;
-        this.atkB = atkB;
-        this.hpB = hpB;
-        this.mpB = mpB;
-
-    }
     public Equip(Statistiche componente, String nome, String tipo,String classe, int atkB, int hpB, int mpB) {
         super(componente);
         this.nome = nome;

@@ -203,7 +203,7 @@ public class Gamesystem {
 
                 String[] dati = riga.split("\\|");
                
-                eq= new Equip(dati[0], dati[1],dati[2], Integer.parseInt(dati[3]), Integer.parseInt(dati[4]), Integer.parseInt(dati[5]));
+                eq= new Equip(null,dati[0], dati[1],dati[2], Integer.parseInt(dati[3]), Integer.parseInt(dati[4]), Integer.parseInt(dati[5]));
                 listaEquip.add(eq);
                 
             }
@@ -262,7 +262,7 @@ public class Gamesystem {
             System.out.println("Inserisci il bonus MP:");
             int mpBonus= input.nextInt();
             input.nextLine();
-            Equip eq=new Equip(nomeEq, tipoEq, classeEq, atkBonus, hpBonus, mpBonus);
+            eq=new Equip(null,nomeEq, tipoEq, classeEq, atkBonus, hpBonus, mpBonus);
             listaEquip.add(eq); 
             System.out.println("Equipaggiamento creato: " + eq.getNome() + " Tipo: " + eq.getTipo());
             return eq;
@@ -454,25 +454,25 @@ public class Gamesystem {
     }
     public void mostraMenu() {
 
-    int scelta;
+        int scelta;
 
-    do {
-        System.out.println("\n=== MENU PRINCIPALE ===");
-        System.out.println("1 - Inizia Avventura");
-        System.out.println("2 - Mostra scheda personaggio");
-        System.out.println("3 - Mostra tutti i personaggi");
-        System.err.println("4 - Mostra tutti gli equipaggiamenti");
-        System.out.println("5 - Scegli Equipaggiamento per Eroe");
-        System.out.println("0 - Esci");
-        System.out.print("Scelta: ");
+        do {
+            System.out.println("\n=== MENU PRINCIPALE ===");
+            System.out.println("1 - Inizia Avventura");
+            System.out.println("2 - Mostra scheda personaggio");
+            System.out.println("3 - Mostra tutti i personaggi");
+            System.err.println("4 - Mostra tutti gli equipaggiamenti");
+            System.out.println("5 - Scegli Equipaggiamento per Eroe");
+            System.out.println("0 - Esci");
+            System.out.print("Scelta: ");
 
-        scelta = input.nextInt();
-        input.nextLine(); // Consumare la nuova linea rimasta nel buffer
+            scelta = input.nextInt();
+            input.nextLine(); // Consumare la nuova linea rimasta nel buffer
 
-        switch (scelta) {  
-            case 1:
-                selezioneAttore();
-                break;
+            switch (scelta) {  
+                case 1:
+                    selezioneAttore();
+                    break;
             case 2:
                 mostraScheda();
                 break;
@@ -494,7 +494,7 @@ public class Gamesystem {
         }
 
     } while (scelta != 0);
-}
+    }
     public Nemico selezioneNemico(){
         //per comodità si scelgono nemici casuali, si può aggiustare la logica con la ricerca per classe/nome del nemico
         System.out.printf("La tua winstreak è: [%d]\n",winstreak);

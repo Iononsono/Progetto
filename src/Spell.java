@@ -17,7 +17,7 @@ public abstract class Spell {
         this.tipo = tipo;
         this.valore = valore;
     }
-    public abstract void applicaEffetto(Map<String, Float> statsUtilizzatore, Map<String, Float> statsBersaglio);
+    public abstract boolean applicaEffetto(Map<String, Float> statsUtilizzatore, Map<String, Float> statsBersaglio);
 
     public String getNome() {
         return nome;

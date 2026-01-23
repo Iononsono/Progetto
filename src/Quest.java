@@ -12,6 +12,7 @@ public class Quest {
         this.obiettivo = obiettivo;
         this.completata = false;
         this.premio = premio;
+        this.premioRiscattato = false;
     }
 
     public void aggiorna(Object evento) {
@@ -22,6 +23,9 @@ public class Quest {
                 System.out.println("\n[QUEST] Completata: " + titolo);
             }
         }
+    }
+    public void setPremioRiscattato(boolean riscattato) {
+        this.premioRiscattato = riscattato;
     }
 
     public void stampaQuest(){
@@ -58,5 +62,8 @@ public class Quest {
         }
         barra.append("] ").append((int)(percentuale * 100)).append("%");
         return barra.toString();
+    }
+    public boolean isPremioRiscattato() {
+        return premioRiscattato;
     }
 }
