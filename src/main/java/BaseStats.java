@@ -64,16 +64,21 @@ public class BaseStats implements Statistiche {
         System.out.println("Inserisci " + puntiDisponibili + " punti stats in totale tra[HP/ATK/MP]:");
         boolean Pcorretti = false;
         while(!Pcorretti){
-            float hp=input.nextFloat();
-            float atk=input.nextFloat();
-            float mp=input.nextFloat();
-            if (checkStats(hp, atk, mp) == puntiDisponibili) {
-            stats.set(0, hp);
-            stats.set(1, atk);
-            stats.set(2, mp);
-            Pcorretti=true;
-            }else {
-                System.out.println("Errore! Devi distribuire esattamente " + puntiDisponibili + " punti.");    
+            try {
+                float hp=input.nextFloat();
+                float atk=input.nextFloat();
+                float mp=input.nextFloat();
+                if (checkStats(hp, atk, mp) == puntiDisponibili) {
+                    stats.set(0, hp);
+                    stats.set(1, atk);
+                    stats.set(2, mp);
+                    Pcorretti=true;
+                }else {
+                    System.out.println("Errore! Devi distribuire esattamente " + puntiDisponibili + " punti.");    
+                }
+            } catch (Exception e) {
+                System.out.println("Input non valido. Inserisci numeri validi per HP, ATK, MP.");
+                input.nextLine(); // consume invalid input
             }
         }
         return stats;

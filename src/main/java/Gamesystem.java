@@ -43,15 +43,27 @@ public class Gamesystem {
         String nome;
         String classe;
         System.out.println("Sei admin o player?(0 o 1)"); 
-        int Attore = input.nextInt();
+        int Attore;
+        try {
+            Attore = input.nextInt();
+        } catch (Exception e) {
+            System.out.println("Input non valido. Impostazione player di default.");
+            Attore = 1;
+            input.nextLine();
+        }
         if(Attore == 0){
            System.out.println("Benvenuto Admin!");
            System.out.println("\n=== MENU Admin ===");
            System.out.println("1 - Crea Nemico");
            System.out.println("2 - Crea Equipaggiamento");
            System.out.println("3 - Crea Quest");
-           scelta = input.nextInt();
-           input.nextLine(); 
+           try {
+               scelta = input.nextInt();
+               input.nextLine(); 
+           } catch (Exception e) {
+               System.out.println("Input non valido. Ritorno al menu.");
+               return;
+           }
            switch(scelta){
             case 1:
                 System.out.println("Inserisci il nome del nemico:");
@@ -82,8 +94,13 @@ public class Gamesystem {
             System.out.println("4 - Accetta Quest");
             System.out.println("0 - Esci");
             System.out.print("Scelta: ");
-            scelta = input.nextInt();
-            input.nextLine();
+            try {
+                scelta = input.nextInt();
+                input.nextLine();
+            } catch (Exception e) {
+                System.out.println("Input non valido. Ritorno al menu.");
+                return;
+            }
             switch (scelta) {
                 case 1:
                     System.out.println("Inserisci il nome del tuo eroe:"); 
@@ -105,10 +122,16 @@ public class Gamesystem {
                     }else{
                         ero.stampaInv();
                         int equipScelto=0;
-                        while(equipScelto!=-1){
+                        while(equipScelto!=-1){//per comodità indice invece del nome
                             System.out.println("Scegli l'equipaggiamento da equipaggiare:");
-                            equipScelto = input.nextInt();
-                            input.nextLine();
+                            try {
+                                equipScelto = input.nextInt();
+                                input.nextLine();
+                            } catch (Exception ex) {
+                                System.out.println("Input non valido. Riprova.");
+                                input.nextLine(); // Consumare l'input errato
+                                continue;
+                            }
                             ero.equipItem(equipScelto);
                             }
                         }
@@ -222,7 +245,6 @@ public class Gamesystem {
                 
                 q = QuestFactory.crea(dati[0], dati[1], dati[2], dati[3], Integer.parseInt(dati[4]), trovaEquip(dati[5]));
                 listaQuest.add(q);
-                System.out.println("Add quest:"+q.getTitolo());
             }
 
         } catch (Exception e) {
@@ -238,7 +260,13 @@ public class Gamesystem {
             String tipoEq= input.nextLine();
             int sceltaClasse;
             System.out.println("Specifica la classe per cui è destinato l'equipaggiamento:\n1-Guerriero\n2-Mago\n3-Arciere");
-            sceltaClasse= input.nextInt();
+            try {
+                sceltaClasse= input.nextInt();
+            } catch (Exception e) {
+                System.out.println("Input non valido. Impostazione classe Universale.");
+                sceltaClasse = 0;
+                input.nextLine();
+            }
             String classeEq;
             switch(sceltaClasse){
                 case 1:
@@ -256,11 +284,32 @@ public class Gamesystem {
                     break;
                 }
             System.out.println("Inserisci il bonus ATK:");
-            int atkBonus= input.nextInt();
+            int atkBonus;
+            try {
+                atkBonus= input.nextInt();
+            } catch (Exception e) {
+                System.out.println("Input non valido. Impostazione ATK 0.");
+                atkBonus = 0;
+                input.nextLine();
+            }
             System.out.println("Inserisci il bonus HP:");
-            int hpBonus= input.nextInt();
+            int hpBonus;
+            try {
+                hpBonus= input.nextInt();
+            } catch (Exception e) {
+                System.out.println("Input non valido. Impostazione HP 0.");
+                hpBonus = 0;
+                input.nextLine();
+            }
             System.out.println("Inserisci il bonus MP:");
-            int mpBonus= input.nextInt();
+            int mpBonus;
+            try {
+                mpBonus= input.nextInt();
+            } catch (Exception e) {
+                System.out.println("Input non valido. Impostazione MP 0.");
+                mpBonus = 0;
+                input.nextLine();
+            }
             input.nextLine();
             eq=new Equip(null,nomeEq, tipoEq, classeEq, atkBonus, hpBonus, mpBonus);
             listaEquip.add(eq); 
@@ -268,24 +317,23 @@ public class Gamesystem {
             return eq;
     }
     public Quest creaQuest(){
-        System.out.println("Inserisci nome della quest:");
-        String titoloQuest = input.nextLine();
-        System.out.println("Inserisci la descrizione:");
-        String descQuest = input.nextLine();
-        System.out.println("Inserire l'obbiettivo della quest:[KILL/....]");
-        String obQuest= input.nextLine();
-        System.out.println("Inserire il Target[LIVELLO/<NEMICO>]:");
-        String targetQuest = input.nextLine();
-        System.out.println("Inserire il numuero per il target scelto:");
-        int numTargQuest = input.nextInt();
+        
         System.out.println("Premio casuale o specifico? [-1/Numero equipaggiamento]");
         stampaEquip();
-        int premioScelto = input.nextInt();
-        if(premioScelto==-1){
-        premioScelto=random.nextInt(listaEquip.size());
+        int premioScelto;
+        try {
+            premioScelto = input.nextInt();
+            input.nextLine();
+        } catch (Exception e) {
+            System.out.println("Input non valido. Impostazione premio casuale.");
+            premioScelto = -1;
+            input.nextLine();
         }
-        Equip eq=listaEquip.get(premioScelto);
-        Quest q = QuestFactory.crea(titoloQuest,descQuest,obQuest, targetQuest, numTargQuest,eq); 
+        if(premioScelto==-1){
+            premioScelto=random.nextInt(listaEquip.size());//per semplicità si digita da console interno invece del nome
+        }
+        eq=listaEquip.get(premioScelto);
+        Quest q = QuestFactory.crea(eq); 
         listaQuest.add(q);
         return q;
     }
@@ -418,8 +466,8 @@ public class Gamesystem {
             }
         }
     public Equip trovaEquip(String dati){
-        for(Equip q: listaEquip){
-            if(q.getNome().equals(dati)) return q;
+        for( Equip eq: listaEquip){
+            if(eq.getNome().equals(dati)) return eq;
         }
         return null;
     }

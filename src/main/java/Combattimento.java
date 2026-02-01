@@ -10,7 +10,7 @@ public class Combattimento {
     private Map<String, Float> statsNemico;
     private Scanner input = new Scanner(System.in);
     private float manaRecuperato, manaMax;
-    private int expG=100;//n.getExpRilasciata();
+    private int expG=1000;//per comodità tutti i nemici danno 100 exp
 
     public Combattimento(Eroe e, Nemico n) {
         this.e = e;
@@ -59,8 +59,14 @@ public class Combattimento {
     System.out.println("E' il turno di " + e.getNome() + ". Scegli un'azione:\n|1->Attacca|2->Usa Spell|");
     int sceltaEroe;
     float temp=statsEroe.get("mp");
-    sceltaEroe=input.nextInt();
-    input.nextLine(); // Consumare la nuova linea rimasta nel buffer
+    try {
+        sceltaEroe=input.nextInt();
+        input.nextLine(); // Consumare la nuova linea rimasta nel buffer
+    } catch (Exception ex) {
+        System.out.println("Input non valido. Attacco di default.");
+        sceltaEroe = 1;
+        input.nextLine();
+    }
     switch(sceltaEroe) {
         case 1:
             System.out.println(e.getNome() + " sceglie di attaccare.");
@@ -96,8 +102,14 @@ public class Combattimento {
 
     public void sceltaspell(Eroe e) {
         System.out.println("Scegli una spell da usare:");
-        int spellScelta = input.nextInt();   
-        input.nextLine(); // Consumare la nuova linea rimasta nel buffer
+        int spellScelta;
+        try {
+            spellScelta = input.nextInt();   
+            input.nextLine(); // Consumare la nuova linea rimasta nel buffer
+        } catch (Exception ex) {
+            System.out.println("Input non valido. Torna al turno.");
+            return;
+        }
         if(spellScelta==e.getSpells().size()){
             TurnoEroe();
             return;
@@ -105,7 +117,12 @@ public class Combattimento {
         Spell s = e.getSpells().get(spellScelta);
         if(!s.applicaEffetto(statsEroe, statsNemico)){
             System.out.println("MP insufficienti per usare " + s.getNome());
-            sceltaspell(e);
+            try {
+                sceltaspell(e);
+            } catch (Exception ex) {
+                System.out.println("Errore durante la scelta della spell.");
+                input.nextLine();
+            }
         }
         
     }

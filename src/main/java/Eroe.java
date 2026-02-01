@@ -101,7 +101,6 @@ public class Eroe extends Entita {
     public void addSpells(List<Spell> listaSpells) {
         for(Spell s : listaSpells) {
             if(s.getClasse().equals(this.classe)) {
-                System.out.printf(" %s[%s] è stata appresa da %s[%s]\n", s.getNome(),s.getClasse(),this.nome,this.classe);
                 SpellsEroe.add(s);
             }
         }
@@ -114,7 +113,6 @@ public class Eroe extends Entita {
             q.stampaQuest();
             i++;
             }
-        int scelta=0;
         System.out.println("Seleziona Quest");
         while(true){
             int index=input.nextInt();
@@ -158,6 +156,7 @@ public class Eroe extends Entita {
                 break;
             }
         }
+        //per pulizia di codice sarebbe stato meglio fare una classe inventario così da evitare una ricerca ad ogni equipaggiamento
         Inv.put(scelto, true);
         System.out.println("Hai equipaggiato: " + scelto.getNome());
         calcolaStatsFinali(); 
@@ -202,17 +201,30 @@ public class Eroe extends Entita {
     }
     
     public void levelUP(int expG){
-        expAttuale= (expAttuale+expG)-expN;
-        int vlv=livello;
-        livello++;
-        System.out.println("========================================");
-        System.out.println("|Complimenti sei salito di livello!"+vlv+"->"+livello+"|");
-        System.out.println("========================================");
-        controllaQuest(getLivello());
-        this.expN = this.livello+1;
-        List<Float> stats = bs.assegnaPunti(3);
-        bs.sommaStats(bs.getHp() + stats.get(0), bs.getAtk() + stats.get(1), bs.getMp() + stats.get(2));
-        calcolaStatsFinali();
-        bs.mostraStats();
+        int vlv = livello;
+        int expTotale = expAttuale + expG;
+        while(expTotale >= expN){
+            expTotale -= expN;
+            livello++;
+            // Aggiorna expN per il nuovo livello
+            expN = livello * 10;
+            // Controlla quest per ogni livello salito
+            
+        }
+        expAttuale = expTotale;
+        if (livello > vlv) {
+            System.out.println("========================================");
+            System.out.println("|Complimenti sei salito di livello!" + vlv + "->" + livello + "|");
+            System.out.println("========================================");
+            int puntiBonus = 3 * (livello - vlv);
+            List<Float> stats = bs.assegnaPunti(puntiBonus);
+            bs.sommaStats(bs.getHp() + stats.get(0), bs.getAtk() + stats.get(1), bs.getMp() + stats.get(2));
+            calcolaStatsFinali();
+            bs.mostraStats();
+            controllaQuest(livello);
+        }
+    }
+    public List<Quest> getQuestsEroe(){
+        return QuestsEroe;
     }
 }
